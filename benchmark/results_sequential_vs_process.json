@@ -1,0 +1,28 @@
+{
+  "128": {
+    "sequential": {
+      "time": 84.77028491598321,
+      "fitness": 0.6875,
+      "generations": 3000,
+      "best_candidate": "THE TeA2EDY^qF uAHLET,\nPRINC4bO\\(D):Mc4%\n\n\nK1IW+lliavIShakeDpeare\u000b)\n6yrama\tiNcQi$son7b`\nh alCudius%BK6mg of\tie\rmt6@.\n  Ma?cellus",
+      "all_times": [
+        84.77028491598321
+      ]
+    },
+    "processes": {
+      "time": 77.10861137500615,
+      "fitness": 0.6875,
+      "generations": 3000,
+      "best_candidate": "THE TeA2EDY^qF uAHLET,\nPRINC4bO\\(D):Mc4%\n\n\nK1IW+lliavIShakeDpeare\u000b)\n6yrama\tiNcQi$son7b`\nh alCudius%BK6mg of\tie\rmt6@.\n  Ma?cellus",
+      "all_times": [
+        77.10861137500615
+      ]
+    },
+    "parameters": {
+      "population_size": 900,
+      "mutation_rate": 0.06,
+      "selection_pressure": 0.15,
+      "crossover_rate": 0.75
+    }
+  }
+}
