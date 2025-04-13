@@ -6,8 +6,9 @@ from tqdm import tqdm
 from hamlet_evolver import (
     generate_hamlet_string,
     calculate_hamlet_fitness_for_target,
-    mutate_hamlet_static,
-    crossover_hamlet
+    mutate_hamlet,
+    crossover_hamlet,
+    read_hamlet_target
 )
 
 def evolve_text(target_text, population_size=100, mutation_rate=0.1, selection_pressure=0.1, crossover_rate=0.7, max_generations=None, show_progress=True):
@@ -69,7 +70,7 @@ def evolve_text(target_text, population_size=100, mutation_rate=0.1, selection_p
             else:
                 child = parent1
             
-            child = mutate_hamlet_static(child, mutation_rate)
+            child = mutate_hamlet(child, mutation_rate)
             new_population.append(child)
         
         population = new_population
@@ -82,5 +83,5 @@ if __name__ == "__main__":
     parser.add_argument('file', help='Path to the target text file')
     args = parser.parse_args()
     
-    target = read_target_text(args.file)
+    target = read_hamlet_target(args.file)
     best, fitness, gens = evolve_text(target) 

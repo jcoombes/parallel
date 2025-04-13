@@ -32,24 +32,6 @@ POPULATION_SIZE = 5000  # Increased from 1000
 BASE_MUTATION_RATE = 0.02  # Base mutation rate
 FITNESS_THRESHOLD = 0.95  # Stop when we reach 95% match
 
-# Precompute mutation rate lookup table
-MUTATION_RATE_TABLE = {}
-for fitness in range(0, 1001):  # 0.000 to 1.000 in steps of 0.001
-    f = fitness / 1000
-    if f < 0.3:
-        rate = BASE_MUTATION_RATE * 2
-    elif f < 0.7:
-        rate = BASE_MUTATION_RATE * (2 - (f - 0.3) / 0.4)
-    else:
-        rate = BASE_MUTATION_RATE * (1 - (f - 0.7) / 0.4)
-    MUTATION_RATE_TABLE[fitness] = rate
-
-def get_hamlet_mutation_rate(fitness):
-    """Get mutation rate from precomputed lookup table."""
-    # Convert fitness to table index (0-1000)
-    index = min(1000, max(0, int(fitness * 1000)))
-    return MUTATION_RATE_TABLE[index]
-
 # Create a fixed thread pool at module level
 THREAD_POOL = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
 
@@ -70,9 +52,8 @@ def calculate_hamlet_fitness_parallel(population):
         futures = [executor.submit(calculate_hamlet_fitness, candidate) for candidate in population]
         return [future.result() for future in futures]
 
-def mutate_hamlet(candidate, current_fitness):
-    """Mutate a candidate with dynamic mutation rate based on fitness."""
-    mutation_rate = get_hamlet_mutation_rate(current_fitness)
+def mutate_hamlet(candidate, mutation_rate):
+    """Mutate a candidate with a given mutation rate."""
     result = list(candidate)
     for i in range(len(result)):
         if random.random() < mutation_rate:
@@ -164,8 +145,7 @@ def evolve_hamlet(target_text, population_size=100, mutation_rate=0.1, selection
             else:
                 child = parent1
             
-            # Apply static mutation rate
-            child = mutate_hamlet_static(child, mutation_rate)
+            child = mutate_hamlet(child, mutation_rate)
             new_population.append(child)
         
         population = new_population
@@ -177,14 +157,6 @@ def calculate_hamlet_fitness_for_target(candidate, target):
         return 0.0
     matches = sum(1 for a, b in zip(candidate, target) if a == b)
     return matches / len(target)
-
-def mutate_hamlet_static(candidate, mutation_rate):
-    """Mutate a candidate with a static mutation rate."""
-    result = list(candidate)
-    for i in range(len(result)):
-        if random.random() < mutation_rate:
-            result[i] = random.choice(string.ascii_letters + string.punctuation + string.digits + string.whitespace)
-    return ''.join(result)
 
 def main():
     args = parse_hamlet_args()
