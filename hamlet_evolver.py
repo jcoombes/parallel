@@ -3,24 +3,12 @@ import string
 import sys
 import argparse
 from tqdm import tqdm
-from hamlet_quotes import QUOTES, find_quote_locations
 from concurrent.futures import ThreadPoolExecutor
 import multiprocessing
-import threading
 
 def read_hamlet(file_path='hamlet.txt'):
     with open(file_path, 'r') as file:
         return file.read()
-
-def is_valid_hamlet_character(char):
-    return char in string.ascii_letters + string.punctuation + string.digits + string.whitespace
-
-def validate_hamlet_string(text):
-    invalid_chars = set()
-    for char in text:
-        if not is_valid_hamlet_character(char):
-            invalid_chars.add(char)
-    return len(invalid_chars) == 0, invalid_chars
 
 def parse_hamlet_args():
     parser = argparse.ArgumentParser(description='Evolve Hamlet text using a genetic algorithm')
@@ -32,9 +20,6 @@ POPULATION_SIZE = 5000  # Increased from 1000
 BASE_MUTATION_RATE = 0.02  # Base mutation rate
 FITNESS_THRESHOLD = 0.95  # Stop when we reach 95% match
 
-# Create a fixed thread pool at module level
-THREAD_POOL = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
-
 def generate_hamlet_string(length):
     """Generate a random string of given length."""
     return ''.join(random.choice(string.ascii_letters + string.punctuation + string.digits + string.whitespace) for _ in range(length))
@@ -45,12 +30,6 @@ def calculate_hamlet_fitness(candidate):
         return 0.0
     matches = sum(1 for a, b in zip(candidate, TARGET) if a == b)
     return matches / len(TARGET)
-
-def calculate_hamlet_fitness_parallel(population):
-    """Calculate fitness for a population in parallel using threads."""
-    with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
-        futures = [executor.submit(calculate_hamlet_fitness, candidate) for candidate in population]
-        return [future.result() for future in futures]
 
 def mutate_hamlet(candidate, mutation_rate):
     """Mutate a candidate with a given mutation rate."""
@@ -64,30 +43,6 @@ def crossover_hamlet(parent1, parent2):
     """Perform crossover between two parents."""
     point = random.randint(0, len(parent1))
     return parent1[:point] + parent2[point:]
-
-def format_hamlet_quote_excerpt(candidate: str, quote, window_size: int = 20) -> str:
-    """Format a quote excerpt with context, showing correct characters in green."""
-    if quote.location is None:
-        return f"{quote.speaker} (Act {quote.act} Scene {quote.scene}): [Not found]"
-    
-    start = max(0, quote.location - window_size)
-    end = min(len(candidate), quote.location + len(quote.text) + window_size)
-    context = candidate[start:end]
-    
-    # Highlight correct characters
-    highlighted = []
-    for i, char in enumerate(context):
-        pos = start + i
-        if quote.location <= pos < quote.location + len(quote.text):
-            target_char = TARGET[pos] if pos < len(TARGET) else ''
-            if char == target_char:
-                highlighted.append(f"\033[32m{char}\033[0m")  # Green for correct
-            else:
-                highlighted.append(char)
-        else:
-            highlighted.append(char)
-    
-    return f"{quote.speaker} (Act {quote.act} Scene {quote.scene}): {''.join(highlighted)}"
 
 def read_hamlet_target(file_path):
     """Read target text from file."""
