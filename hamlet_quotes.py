@@ -10,12 +10,14 @@ class Quote:
     act: int
     scene: int
     location: Optional[int] = None  # Will store the index where the quote starts in the text
+    is_essential: bool = False
 
 QUOTES = [
     Quote(
         "O that this too too solid flesh would melt",
         "Hamlet",
-        1, 2
+        1, 2,
+        is_essential=False
     ),
     Quote(
         "Neither a borrower nor a lender be",
@@ -25,31 +27,36 @@ QUOTES = [
     Quote(
         "Something is rotten in the state of Denmark",
         "Marcellus",
-        1, 4
+        1, 4,
+        is_essential=False
     ),
     Quote(
         "Brevity is the soul of wit",
-        "Hamlet",
-        3, 1
+        "Polonius",
+        2, 2,
+        is_essential=True
     ),
     Quote(
         "To be, or not to be, that is the question",
         "Hamlet",
-        3, 1
+        3, 1,
+        is_essential=True
     ),
     Quote(
         "Alas, poor Yorick! I knew him, Horatio",
         "Hamlet",
-        5, 1
+        5, 1,
+        is_essential=True
     ),
     Quote(
         "The rest is silence",
         "Hamlet",
-        5, 2
+        5, 2,
+        is_essential=True
     ),
     Quote(
         "Goodnight sweet prince",
-        "Hamlet",
+        "Horatio",
         5, 2
     )
 ]
@@ -109,19 +116,26 @@ def peek_quotes(text: str, window_size: int = 50) -> List[str]:
     return [quote.text for quote in found_quotes if quote.location is not None]
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python hamlet_quotes.py <text_file>")
+    if len(sys.argv) != 2 and len(sys.argv) != 3:
+        print("Usage: python hamlet_quotes.py <text_file> [--essential]")
         sys.exit(1)
+
+    text_file = sys.argv[1]
+    essential_only = len(sys.argv) == 3 and sys.argv[2] == "--essential"
     
     try:
-        with open(sys.argv[1], 'r') as file:
+        with open(text_file, 'r') as file:
             text = file.read()
         
         quotes = peek_quotes(text)
+        if essential_only:
+            quotes = [q.text for q in QUOTES if q.is_essential]
+        else:
+            quotes = [q.text for q in QUOTES]
         print("\n".join(quotes))
             
     except FileNotFoundError:
-        print(f"Error: File '{sys.argv[1]}' not found.")
+        print(f"Error: File '{text_file}' not found.")
         sys.exit(1)
 
 if __name__ == "__main__":
