@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "command": "source /Users/jam/.venvs/parallel-313/bin/activate && python hello.py benchmark/hamlet_128.txt",
+      "mean": 2.2697738280200004,
+      "stddev": 0.18327163293966753,
+      "median": 2.23895059202,
+      "user": 2.088060146666667,
+      "system": 0.31738244000000004,
+      "min": 2.10386821702,
+      "max": 2.46650267502,
+      "times": [
+        2.23895059202,
+        2.10386821702,
+        2.46650267502
+      ],
+      "exit_codes": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "16": {
+    "threads": {
+      "time": 0.1934957504272461,
+      "fitness": 1.0,
+      "generations": 18,
+      "best_candidate": "THE TRAGEDY OF H"
+    },
+    "processes": {
+      "time": 0.46240806579589844,
+      "fitness": 1.0,
+      "generations": 16,
+      "best_candidate": "THE TRAGEDY OF H"
+    },
+    "parameters": {
+      "population_size": 900,
+      "mutation_rate": 0.06,
+      "selection_pressure": 0.15,
+      "crossover_rate": 0.75
+    }
+  },
+  "32": {
+    "threads": {
+      "time": 0.46480703353881836,
+      "fitness": 0.96875,
+      "generations": 37,
+      "best_candidate": "THE TRAGEDY OF HAMLET, PRIsCE OF"
+    },
+    "processes": {
+      "time": 0.5938689708709717,
+      "fitness": 0.96875,
+      "generations": 30,
+      "best_candidate": "THE TRAGEDY)OF HAMLET, PRINCE OF"
+    },
+    "parameters": {
+      "population_size": 900,
+      "mutation_rate": 0.06,
+      "selection_pressure": 0.15,
+      "crossover_rate": 0.75
+    }
+  },
+  "64": {
+    "threads": {
+      "time": 3.3067080974578857,
+      "fitness": 0.953125,
+      "generations": 190,
+      "best_candidate": "THE TRAGEDY OF 7AMLET, PRINCE O\n DENMAXK\n\n\nby William Shakespear"
+    },
+    "processes": {
+      "time": 2.4367520809173584,
+      "fitness": 0.953125,
+      "generations": 145,
+      "best_candidate": "THE TRAGEDY OF HAMLE-, PRINCE OF 0ENMARK\n\n\nby William &hakespear"
+    },
+    "parameters": {
+      "population_size": 900,
+      "mutation_rate": 0.06,
+      "selection_pressure": 0.15,
+      "crossover_rate": 0.75
+    }
+  },
+  "128": {
+    "threads": {
+      "time": 62.905946016311646,
+      "fitness": 0.671875,
+      "generations": 2000,
+      "best_candidate": "eH{ R'AqEPY `N;XaMdET,RPRIcCE kF 3ENQ z\r\n}\nbySWNlJ#am Shakes*e-{B\n\n\nMDrJjatis PeEs\rnoe\nh\\ dxDudiI(, K<ng oy)DVnmar5J\n  2arcallus"
+    },
+    "processes": {
+      "time": 52.11638402938843,
+      "fitness": 0.671875,
+      "generations": 2000,
+      "best_candidate": "THL HRfGEDY OM H?MLEI, Ps>NC@ OZ \rENAA:xAn\n?y\fWJlliam1J$akzm\u000beIreP\n\n\nD{a_vtZs\tPer :Aae8\n  \rl\fudiDs,)+Kng of,DMnmark.\nV (Ir'elluR"
+    },
+    "parameters": {
+      "population_size": 900,
+      "mutation_rate": 0.06,
+      "selection_pressure": 0.15,
+      "crossover_rate": 0.75
+    }
+  }
+}

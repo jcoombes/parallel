@@ -135,13 +135,15 @@ def run_benchmarks():
     selection_pressure = 0.15  # from 0.143
     crossover_rate = 0.75  # from 0.756
     
+    # Read the full hamlet text
+    with open('hamlet.txt', 'r') as f:
+        full_text = f.read()
+    
     for size in text_sizes:
         print(f"\nBenchmarking with text size {size}...")
-        target_file = f"benchmark/hamlet_{size}.txt"
         
-        # Read target text
-        with open(target_file, 'r') as f:
-            target_text = f.read()
+        # Take a slice of the text
+        target_text = full_text[:size]
         
         # Run sequential benchmark
         print("Running sequential benchmark...")
