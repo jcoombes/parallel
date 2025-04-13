@@ -5,15 +5,15 @@ import sys
 import string
 import timeit
 from pathlib import Path
-from hello_mp import evolve_text as evolve_text_processes
-from hello import calculate_fitness_for_target
+from hamlet_evolver_mp import evolve_text as evolve_hamlet_processes
+from hamlet_evolver import calculate_hamlet_fitness_for_target
 from tqdm import tqdm
 
-def generate_random_string(length):
+def generate_hamlet_string(length):
     """Generate a random string of given length."""
     return ''.join(random.choice(string.ascii_letters + string.punctuation + string.digits + string.whitespace) for _ in range(length))
 
-def mutate(candidate, mutation_rate):
+def mutate_hamlet(candidate, mutation_rate):
     """Mutate a candidate with a given mutation rate."""
     result = list(candidate)
     for i in range(len(result)):
@@ -21,18 +21,18 @@ def mutate(candidate, mutation_rate):
             result[i] = random.choice(string.ascii_letters + string.punctuation + string.digits + string.whitespace)
     return ''.join(result)
 
-def crossover(parent1, parent2):
+def crossover_hamlet(parent1, parent2):
     """Perform crossover between two parents."""
     point = random.randint(0, len(parent1))
     return parent1[:point] + parent2[point:]
 
-def evolve_text_sequential(target_text, population_size=100, mutation_rate=0.1, selection_pressure=0.1, crossover_rate=0.7, max_generations=None, show_progress=True):
+def evolve_hamlet_sequential(target_text, population_size=100, mutation_rate=0.1, selection_pressure=0.1, crossover_rate=0.7, max_generations=None, show_progress=True):
     """
     Sequential version of the genetic algorithm with no concurrency.
     Returns (best_candidate, fitness, generations)
     """
     # Initialize population
-    population = [generate_random_string(len(target_text)) for _ in range(population_size)]
+    population = [generate_hamlet_string(len(target_text)) for _ in range(population_size)]
     generation = 0
     best_fitness = 0.0
     
@@ -43,7 +43,7 @@ def evolve_text_sequential(target_text, population_size=100, mutation_rate=0.1, 
     
     while True:
         # Calculate fitness for each candidate sequentially
-        fitness_scores = [(p, calculate_fitness_for_target(p, target_text)) for p in population]
+        fitness_scores = [(p, calculate_hamlet_fitness_for_target(p, target_text)) for p in population]
         fitness_scores.sort(key=lambda x: x[1], reverse=True)
         
         # Get best candidate
@@ -73,11 +73,11 @@ def evolve_text_sequential(target_text, population_size=100, mutation_rate=0.1, 
             parent1 = random.choice(top_performers)
             if random.random() < crossover_rate:
                 parent2 = random.choice(top_performers)
-                child = crossover(parent1, parent2)
+                child = crossover_hamlet(parent1, parent2)
             else:
                 child = parent1
             
-            child = mutate(child, mutation_rate)
+            child = mutate_hamlet(child, mutation_rate)
             new_population.append(child)
         
         population = new_population
@@ -100,7 +100,7 @@ def benchmark_evolution(evolve_func, target_text, population_size, mutation_rate
     
     # Run the benchmark multiple times and take the best time
     number = 1  # Number of times to run in a single timing
-    repeat = 1  # Number of timings to perform (changed from 3 to 1)
+    repeat = 1  # Number of timings to perform
     
     # Time the function
     times = timeit.repeat(
@@ -148,7 +148,7 @@ def run_benchmarks():
         # Run sequential benchmark
         print("Running sequential benchmark...")
         sequential_results = benchmark_evolution(
-            evolve_text_sequential,
+            evolve_hamlet_sequential,
             target_text,
             population_size,
             mutation_rate,
@@ -159,7 +159,7 @@ def run_benchmarks():
         # Run process-based benchmark
         print("Running process-based benchmark...")
         process_results = benchmark_evolution(
-            evolve_text_processes,
+            evolve_hamlet_processes,
             target_text,
             population_size,
             mutation_rate,
@@ -188,7 +188,7 @@ def run_benchmarks():
         print(f"Speedup:    {sequential_results['time']/process_results['time']:.2f}x")
     
     # Save results to file
-    output_file = "benchmark/results_sequential_vs_process.json"
+    output_file = "benchmark/results.json"
     with open(output_file, 'w') as f:
         json.dump(results, f, indent=2)
     print(f"\nResults saved to {output_file}")
