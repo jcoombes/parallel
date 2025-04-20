@@ -5,8 +5,8 @@ import sys
 import timeit
 from pathlib import Path
 from hamlet_evolver import (
-    evolve_hamlet_sequential,
-    evolve_hamlet_processes,
+    evolve_text,
+    evolve_text_processes,
     POPULATION_SIZE,
     MUTATION_RATE,
     SELECTION_PRESSURE,
@@ -50,32 +50,40 @@ def benchmark_evolution(evolve_func, target_text, max_generations=3000):
         'all_times': times  # Store all times for analysis
     }
 
-def run_benchmarks(use_full_text=False):
+def run_benchmarks(use_full_text=False, input_file=None, text_length=None):
     """Run benchmarks for sequential and process based implementations."""
     # Set random seed for reproducibility
     random.seed(42)
     
-    # Read the essential hamlet text
-    with open('hamlet_essential.txt', 'r') as f:
-        essential_text = f.read()
+    # Read target text
+    if input_file:
+        with open(input_file, 'r') as f:
+            target_text = f.read()
+    else:
+        with open('hamlet_essential.txt', 'r') as f:
+            target_text = f.read()
+            if not use_full_text and not text_length:
+                # Default to first 107 characters for essential
+                target_text = target_text[:107]
     
-    # Use either full text or first 107 characters
-    target_text = essential_text if use_full_text else essential_text[:107]
+    # Apply length if specified
+    if text_length:
+        target_text = target_text[:text_length]
+    
     text_size = len(target_text)
-    
     print(f"\nBenchmarking with text size {text_size}...")
     
     # Run sequential benchmark
     print("Running sequential benchmark...")
     sequential_results = benchmark_evolution(
-        evolve_hamlet_sequential,
+        evolve_text,
         target_text
     )
     
     # Run process-based benchmark
     print("Running process-based benchmark...")
     process_results = benchmark_evolution(
-        evolve_hamlet_processes,
+        evolve_text_processes,
         target_text
     )
     
@@ -108,7 +116,20 @@ def run_benchmarks(use_full_text=False):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Benchmark genetic algorithm implementations.')
-    parser.add_argument('--full', action='store_true', help='Use full hamlet_essential.txt instead of first 107 characters')
+    parser.add_argument('--file', help='Path to the target text file')
+    parser.add_argument('--essential', action='store_true', help='Use hamlet_essential.txt')
+    parser.add_argument('--length', type=int, help='Number of characters to use from the start of the file')
+    parser.add_argument('--full', action='store_true', help='Use full hamlet_essential.txt (ignored if --file is specified)')
     args = parser.parse_args()
     
-    run_benchmarks(use_full_text=args.full) 
+    # Validate arguments
+    if not args.file and not args.essential:
+        parser.error("Either --file or --essential must be specified")
+    if args.file and args.full:
+        parser.error("--full can only be used with --essential")
+    
+    run_benchmarks(
+        use_full_text=args.full,
+        input_file=args.file,
+        text_length=args.length
+    ) 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="100" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes slither {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(800px); }
+    }
+    .snake {
+      animation: slither 4s linear infinite;
+    }
+  </style>
+  
+  <!-- Python snake -->
+  <g class="snake">
+    <path d="M0,50 C50,30 100,70 150,50 C200,30 250,70 300,50" 
+          stroke="#42affa" 
+          stroke-width="4" 
+          fill="none"/>
+    <circle cx="0" cy="50" r="5" fill="#42affa"/>
+  </g>
+  
+  <!-- Rust snake -->
+  <g class="snake" style="animation-delay: -2s;">
+    <path d="M0,50 C50,70 100,30 150,50 C200,70 250,30 300,50" 
+          stroke="#B7410E" 
+          stroke-width="4" 
+          fill="none"/>
+    <circle cx="0" cy="50" r="5" fill="#B7410E"/>
+  </g>
+</svg> 

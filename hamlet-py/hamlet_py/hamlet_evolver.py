@@ -28,20 +28,22 @@ def parse_args():
     return parser.parse_args()
 
 TARGET = read_hamlet()
-POPULATION_SIZE = 5000  # Increased from 1000
-BASE_MUTATION_RATE = 0.02  # Base mutation rate
-FITNESS_THRESHOLD = 0.95  # Stop when we reach 95% match
+POPULATION_SIZE = 900
+MUTATION_RATE = 0.06
+SELECTION_PRESSURE = 0.15
+CROSSOVER_RATE = 0.75
+FITNESS_THRESHOLD = 0.95
 
 # Precompute mutation rate lookup table
 MUTATION_RATE_TABLE = {}
 for fitness in range(0, 1001):  # 0.000 to 1.000 in steps of 0.001
     f = fitness / 1000
     if f < 0.3:
-        rate = BASE_MUTATION_RATE * 2
+        rate = MUTATION_RATE * 2
     elif f < 0.7:
-        rate = BASE_MUTATION_RATE * (2 - (f - 0.3) / 0.4)
+        rate = MUTATION_RATE * (2 - (f - 0.3) / 0.4)
     else:
-        rate = BASE_MUTATION_RATE * (1 - (f - 0.7) / 0.4)
+        rate = MUTATION_RATE * (1 - (f - 0.7) / 0.4)
     MUTATION_RATE_TABLE[fitness] = rate
 
 def get_dynamic_mutation_rate(fitness):
@@ -163,7 +165,7 @@ def evolve_text(target_text, population_size=100, mutation_rate=0.1, selection_p
             pbar.set_postfix({'fitness': f'{best_fitness:.2f}', 'generation': generation})
         
         # Check termination conditions
-        if best_fitness >= 0.95 or (max_generations and generation >= max_generations):
+        if best_fitness >= FITNESS_THRESHOLD or (max_generations and generation >= max_generations):
             if pbar:
                 pbar.close()
             if show_progress:
@@ -204,87 +206,108 @@ def mutate_static(candidate, mutation_rate):
             result[i] = random.choice(string.ascii_letters + string.punctuation + string.digits + string.whitespace)
     return ''.join(result)
 
-def main():
-    args = parse_args()
-    global TARGET, POPULATION_SIZE, BASE_MUTATION_RATE, FITNESS_THRESHOLD
-    
-    TARGET = read_target_text(args.file)
-    POPULATION_SIZE = 5000
-    BASE_MUTATION_RATE = 0.02
-    FITNESS_THRESHOLD = 0.95  # Stop when we reach 95% match
-
-    # Print system information
-    cpu_count = multiprocessing.cpu_count()
-    chunk_size = POPULATION_SIZE // cpu_count
-    num_chunks = (POPULATION_SIZE + chunk_size - 1) // chunk_size  # Ceiling division
-    
-    print(f"\nSystem Information:", file=sys.stderr)
-    print(f"CPU cores: {cpu_count}", file=sys.stderr)
-    print(f"Population size: {POPULATION_SIZE}", file=sys.stderr)
-    print(f"Chunk size: {chunk_size}", file=sys.stderr)
-    print(f"Number of chunks: {num_chunks}", file=sys.stderr)
-    print(f"Individuals per chunk: {POPULATION_SIZE/num_chunks:.1f}", file=sys.stderr)
-
-    # Validate target string
-    is_valid, invalid_chars = validate_string(TARGET)
-    if not is_valid:
-        print("Error: Target string contains invalid characters:", file=sys.stderr)
-        for char in sorted(invalid_chars):
-            print(f"Character: '{char}' (Unicode: U+{ord(char):04X})", file=sys.stderr)
-        return
-
+def evolve_text_processes(target_text, population_size=100, mutation_rate=0.1, selection_pressure=0.1, crossover_rate=0.7, max_generations=None, show_progress=True):
+    """
+    Evolve text using a genetic algorithm with process-based parallelization.
+    Returns (best_candidate, fitness, generations)
+    """
     # Initialize population
-    population = [generate_random_string(len(TARGET)) for _ in range(POPULATION_SIZE)]
+    population = [generate_random_string(len(target_text)) for _ in range(population_size)]
     generation = 0
     best_fitness = 0.0
     
-    # Create progress bar that writes to stderr
-    pbar = tqdm(file=sys.stderr, desc="Evolving text", position=0)
+    # Create progress bar if requested
+    pbar = None
+    if show_progress:
+        pbar = tqdm(file=sys.stderr, desc="Evolving text", position=0)
     
-    # Print initial quote headers
-    print("\n" * len(QUOTES), file=sys.stderr)  # Make space for quotes
-    quote_lines = [""] * len(QUOTES)
-    
-    while best_fitness < FITNESS_THRESHOLD:
+    while True:
         # Calculate fitness for each candidate in parallel
         fitness_scores = list(zip(population, calculate_fitness_parallel(population)))
         fitness_scores.sort(key=lambda x: x[1], reverse=True)
         
         # Get best candidate
-        best_candidate, best_fitness = fitness_scores[0]
+        best_candidate, current_fitness = fitness_scores[0]
+        best_fitness = max(best_fitness, current_fitness)
         
-        # Update quote displays
-        found_quotes = find_quote_locations(best_candidate)
-        for i, quote in enumerate(QUOTES):
-            new_line = format_quote_excerpt(best_candidate, quote)
-            if new_line != quote_lines[i]:
-                quote_lines[i] = new_line
-                # Move cursor up and print new line
-                print(f"\033[{len(QUOTES)-i}A\033[K{new_line}", file=sys.stderr)
-                print("\033[K", file=sys.stderr)  # Clear to end of line
+        # Update progress
+        if pbar:
+            pbar.update(1)
+            pbar.set_postfix({'fitness': f'{best_fitness:.2f}', 'generation': generation})
         
-        if best_fitness >= FITNESS_THRESHOLD:
-            print(f"\nTarget reached! Fitness: {best_fitness:.2f}", file=sys.stderr)
-            break
+        # Check termination conditions
+        if best_fitness >= FITNESS_THRESHOLD or (max_generations and generation >= max_generations):
+            if pbar:
+                pbar.close()
+            if show_progress:
+                print(f"\nTarget reached! Fitness: {best_fitness:.2f}")
+            return best_candidate, best_fitness, generation
         
         # Select top performers
-        top_performers = [candidate for candidate, _ in fitness_scores[:POPULATION_SIZE//2]]
+        num_parents = int(population_size * selection_pressure)
+        top_performers = [candidate for candidate, _ in fitness_scores[:num_parents]]
         
         # Create new generation
         new_population = []
-        while len(new_population) < POPULATION_SIZE:
+        while len(new_population) < population_size:
             parent1 = random.choice(top_performers)
-            parent2 = random.choice(top_performers)
-            child = crossover(parent1, parent2)
-            child = mutate(child, best_fitness)  # Pass current best fitness for dynamic mutation
+            if random.random() < crossover_rate:
+                parent2 = random.choice(top_performers)
+                child = crossover(parent1, parent2)
+            else:
+                child = parent1
+            
+            # Apply static mutation rate
+            child = mutate_static(child, mutation_rate)
             new_population.append(child)
         
         population = new_population
         generation += 1
-        pbar.update(1)
-        pbar.set_postfix({'fitness': f'{best_fitness:.2f}'})
+
+def main():
+    parser = argparse.ArgumentParser(description='Evolve text using a genetic algorithm.')
+    parser.add_argument('--file', help='Path to the target text file')
+    parser.add_argument('--essential', action='store_true', help='Use hamlet_essential.txt')
+    parser.add_argument('--length', type=int, help='Number of characters to use from the start of the file')
+    parser.add_argument('--full', action='store_true', help='Use full hamlet_essential.txt (ignored if --file is specified)')
+    parser.add_argument('--processes', action='store_true', help='Use process-based parallelization')
+    args = parser.parse_args()
     
-    pbar.close()
+    # Validate arguments
+    if not args.file and not args.essential:
+        parser.error("Either --file or --essential must be specified")
+    if args.file and args.full:
+        parser.error("--full can only be used with --essential")
+    
+    # Read target text
+    if args.essential:
+        target_text = read_hamlet_target('hamlet_essential.txt')
+        if not args.full and not args.length:
+            # Default to first 107 characters for essential
+            target_text = target_text[:107]
+    else:
+        target_text = read_hamlet_target(args.file)
+    
+    # Apply length if specified
+    if args.length:
+        target_text = target_text[:args.length]
+    
+    # Choose evolution function
+    evolve_func = evolve_text_processes if args.processes else evolve_text
+    
+    # Run evolution
+    best_candidate, fitness, generations = evolve_func(
+        target_text,
+        population_size=POPULATION_SIZE,
+        mutation_rate=MUTATION_RATE,
+        selection_pressure=SELECTION_PRESSURE,
+        crossover_rate=CROSSOVER_RATE,
+        show_progress=True
+    )
+    
+    print(f"\nTarget reached! Fitness: {fitness:.2f}")
+    print(f"Generations: {generations}")
+    print(f"Best candidate: {best_candidate}")
 
 if __name__ == "__main__":
     main()
