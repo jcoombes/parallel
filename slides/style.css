@@ -1,532 +1,277 @@
-/* Custom styles for the presentation */
+/* Existing VS Code syntax highlighting */
+/* Previous syntax highlighting rules remain unchanged */
 
-/* General styles */
+/* Theme variables */
+:root {
+    /* Conference colors */
+    --blue: #3778BE;
+    --blue-light: #00C8E1;
+    --blue-lighter: #A2D9EF;
+    --green: #00AA41;
+    --green-light: #96DC00;
+    --green-lighter: #D5F199;
+    --yellow: #FAC800;
+    --orange: #FF9B00;
+    --red: #C41011;
+    --red-light: #E54F53;
+    --grey: #B7BCBF;
+    --pink: #D14190;
+    --pink-light: #E199C3;
+
+    /* Light theme (default) */
+    --background-color: var(--grey);
+    --text-color: white;
+    --heading-color: white;
+    --accent-color: var(--blue-light);
+    --link-color: white;
+    --code-background: #1e1e1e;
+    --blockquote-background: rgba(255, 255, 255, 0.1);
+    --chart-background: rgba(255, 255, 255, 0.1);
+    --chart-border: white;
+}
+
+/* Dark theme */
+body.dark-mode {
+    --background-color: #0a1930;
+    --text-color: #d4d4d4;
+    --heading-color: var(--blue-light);
+    --accent-color: var(--blue-lighter);
+    --link-color: var(--blue-light);
+    --code-background: #1e1e1e;
+    --blockquote-background: rgba(55, 120, 190, 0.1);
+    --chart-background: rgba(55, 120, 190, 0.1);
+    --chart-border: var(--blue-light);
+}
+
+/* Base presentation styles */
 .reveal {
-    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #ffffff;
-    color: #333333;
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 32px;
+    color: var(--text-color);
+    background-color: var(--background-color);
 }
 
-.reveal h1,
-.reveal h2,
-.reveal h3,
-.reveal h4 {
-    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    text-transform: none;
-    margin-bottom: 0.5em;
-    color: #333333;
+.reveal .slides {
+    text-align: left;
+    max-width: 95%;
+    margin: 0 auto;
 }
 
+.reveal .slides section {
+    padding: 20px;
+}
+
+/* Headings */
 .reveal h1 {
-    font-size: 2.5em;
-    font-weight: 700;
+    font-size: 2.2em;
+    color: var(--heading-color);
+    font-weight: bolder;
+    padding: 0.2em 0;
 }
 
 .reveal h2 {
     font-size: 1.8em;
-    font-weight: 600;
+    color: var(--heading-color);
+    font-weight: bolder;
+    padding: 0.2em 0;
 }
 
 .reveal h3 {
     font-size: 1.4em;
-    font-weight: 500;
+    color: var(--heading-color);
+    font-weight: bold;
+    padding: 0.2em 0;
 }
 
-/* Code blocks */
-.reveal pre {
-    box-shadow: none;
-    width: 100%;
-    margin: 0 auto;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    padding: 1em;
-}
-
-.reveal code {
-    font-family: "Fira Code", "Source Code Pro", monospace;
-    font-size: 0.9em;
-    line-height: 1.2;
-    color: #333333;
-}
-
-/* Two-column layout */
-.two-column {
-    display: flex;
-    justify-content: space-between;
-    gap: 2em;
-}
-
-.two-column > div {
-    flex: 1;
-}
-
-/* Graph container */
-.graph-container {
-    max-width: 80%;
-    margin: 0 auto;
-}
-
-/* Mermaid diagrams */
-.mermaid {
-    background: white;
-    padding: 1em;
-    border-radius: 4px;
-}
-
-/* Images */
-.reveal img {
-    max-height: 60vh;
-    margin: 1em auto;
-    border-radius: 4px;
-}
-
-/* Lists */
-.reveal ul {
-    margin-left: 1em;
-    list-style-type: none;
-}
-
-.reveal li {
-    margin-bottom: 0.5em;
-    position: relative;
-    padding-left: 1.5em;
-}
-
-.reveal li:before {
-    content: "•";
-    color: #42affa;
-    position: absolute;
-    left: 0.5em;
-}
-
-/* Blockquotes */
-.reveal blockquote {
-    width: 80%;
-    margin: 1em auto;
-    padding: 0.5em 1em;
-    background: rgba(66, 175, 250, 0.1);
-    border-left: 4px solid #42affa;
-    font-style: italic;
-}
-
-/* Progress bar */
-.reveal .progress {
-    height: 4px;
-    background: rgba(66, 175, 250, 0.2);
-}
-
-.reveal .progress span {
-    background: #42affa;
-}
-
-/* Controls */
-.reveal .controls {
-    color: #42affa;
-}
-
-/* Fragments */
-.reveal .fragment {
-    opacity: 0;
-    transition: all 0.2s ease;
-}
-
-.reveal .fragment.visible {
-    opacity: 1;
-}
-
-/* Custom colors */
-.reveal .rust {
-    color: #dea584;
-}
-
-.reveal .python {
-    color: #3572A5;
-}
-
-/* Section styling */
-.reveal section {
-    padding: 1em;
+.reveal h4 {
+    font-size: 1.3em;
+    color: var(--heading-color);
+    font-weight: bold;
+    padding: 0.2em 0;
 }
 
 /* Content blocks */
 .content-block {
-    background-color: #f5f5f5;
-    padding: 2em;
+    padding: 1.0em 0;
+    color: var(--text-color);
+    background-color: var(--blue);
     border-radius: 8px;
-    margin: 1em 0;
+    margin: 15px 0;
 }
 
-/* CTA sections */
-.cta {
-    text-align: center;
-    margin: 1em 0;
+/* Lists */
+.reveal ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
 }
 
-.cta a {
-    display: inline-block;
-    background-color: #42affa;
-    color: white;
-    padding: 0.8em 1.5em;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
+.reveal ul li {
+    margin: 12px 0;
+    padding-left: 24px;
+    position: relative;
 }
 
-.cta a:hover {
-    background-color: #2a8fd9;
+.reveal ul li:before {
+    content: "•";
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .reveal h1 {
-        font-size: 2em;
-    }
-    
-    .reveal h2 {
-        font-size: 1.5em;
-    }
-    
-    .two-column {
-        flex-direction: column;
-    }
-    
-    .content-block {
-        padding: 1em;
-    }
-}
-
-/* Sponsor section styling */
-.sponsor-type {
-    margin: 2em 0;
-}
-
-.sponsor-type h4 {
-    color: #666;
-    margin-bottom: 1em;
-}
-
-.sponsors {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2em;
-    align-items: center;
-    justify-content: center;
-}
-
-.sponsor {
-    max-width: 200px;
-    padding: 1em;
-    background: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.sponsor img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Scale classes for sponsors */
-.scale-70 { transform: scale(0.7); }
-.scale-80 { transform: scale(0.8); }
-.scale-90 { transform: scale(0.9); }
-
-/* Conference specific styles */
-.conference-info {
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #42affa;
-    margin: 0.5em 0;
-}
-
-.conference-date {
-    font-size: 1.1em;
-    color: #666;
-    margin: 0.3em 0;
-}
-
-.location {
-    font-size: 1em;
-    color: #666;
-    margin: 0.3em 0;
-}
-
-/* Header styling */
-.reveal .slides section:first-child h1 {
-    margin-bottom: 0.5em;
-    color: #333;
-}
-
-.reveal .slides section:first-child h3 {
-    margin-bottom: 1em;
-    color: #666;
-}
-
-/* Content block styling */
-.content-block {
-    background-color: #f5f5f5;
-    padding: 2em;
-    border-radius: 8px;
-    margin: 1em 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.content-block h3 {
-    color: #333;
-    margin-bottom: 1em;
-}
-
-/* Code block styling */
+/* Code blocks */
 .reveal pre {
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    padding: 1em;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .reveal code {
-    font-family: "Fira Code", "Source Code Pro", monospace;
+    font-family: 'Fira Code', monospace;
     font-size: 0.9em;
-    line-height: 1.2;
-    color: #333;
 }
 
-/* List styling */
-.reveal ul {
-    margin-left: 1em;
-    list-style-type: none;
-}
-
-.reveal li {
-    margin-bottom: 0.5em;
-    position: relative;
-    padding-left: 1.5em;
-}
-
-.reveal li:before {
-    content: "•";
-    color: #42affa;
-    position: absolute;
-    left: 0.5em;
-}
-
-/* Blockquote styling */
+/* Blockquotes */
 .reveal blockquote {
-    width: 80%;
-    margin: 1em auto;
-    padding: 0.5em 1em;
-    background: rgba(66, 175, 250, 0.1);
-    border-left: 4px solid #42affa;
+    border-left: 5px solid var(--accent-color);
+    padding: 1em;
+    font-weight: bold;
+    font-size: 1.1em;
+    background: var(--blockquote-background);
+    margin: 20px 0;
+    color: var(--text-color);
+}
+
+/* Chart placeholders */
+.chart-placeholder {
+    background: var(--chart-background);
+    border: 2px dashed var(--chart-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    color: var(--text-color);
+}
+
+/* Two column layout */
+.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.column {
+    width: 100%;
+}
+
+/* Conference specific elements */
+.conference-info {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+}
+
+.conference-date {
+    color: var(--green-light);
+    font-weight: bold;
+}
+
+.location {
     font-style: italic;
-    color: #333;
+    color: var(--text-color);
+    opacity: 0.8;
 }
 
-/* Progress bar styling */
-.reveal .progress {
-    height: 4px;
-    background: rgba(66, 175, 250, 0.2);
-}
-
-.reveal .progress span {
-    background: #42affa;
-}
-
-/* Controls styling */
-.reveal .controls {
-    color: #42affa;
-}
-
-/* Fragment animations */
-.reveal .fragment {
-    opacity: 0;
-    transition: all 0.2s ease;
-}
-
-.reveal .fragment.visible {
-    opacity: 1;
-}
-
-/* Custom colors */
-.reveal .rust {
-    color: #dea584;
-}
-
-.reveal .python {
-    color: #3572A5;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .reveal h1 {
-        font-size: 2em;
-    }
-    
-    .reveal h2 {
-        font-size: 1.5em;
-    }
-    
-    .two-column {
-        flex-direction: column;
-    }
-    
-    .content-block {
-        padding: 1em;
-    }
-    
-    .conference-info {
-        font-size: 1em;
-    }
-    
-    .conference-date,
-    .location {
-        font-size: 0.9em;
-    }
-}
-
-/* Presentation footer */
-.presentation-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background: white;
-    z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-.presentation-footer object {
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-/* Adjust reveal.js slides to account for footer */
-.reveal .slides {
-    padding-bottom: 100px;
-}
-
-/* Ensure footer doesn't overlap with controls */
-.reveal .controls {
-    bottom: 100px;
-}
-
-/* Ensure footer doesn't overlap with progress bar */
-.reveal .progress {
-    bottom: 100px;
-}
-
-/* Responsive adjustments for footer */
-@media (max-width: 768px) {
-    .presentation-footer {
-        height: 80px;
-    }
-    
-    .reveal .slides {
-        padding-bottom: 80px;
-    }
-    
-    .reveal .controls,
-    .reveal .progress {
-        bottom: 80px;
-    }
-}
-
+/* Ferris mascot */
 .ferris-corner {
     position: fixed;
-    bottom: 20px;
     left: 20px;
+    bottom: 20px;
+    width: 100px;
+    height: auto;
     z-index: 1000;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .ferris-corner:hover {
-    opacity: 1;
+    transform: scale(1.1);
 }
 
-.ferris-corner img {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+/* Progress bar and controls */
+.reveal .progress {
+    color: var(--accent-color);
+    height: 4px;
 }
 
-@media (max-width: 768px) {
+.reveal .controls {
+    color: var(--accent-color);
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .reveal {
+        font-size: 24px;
+    }
+
+    .two-columns {
+        grid-template-columns: 1fr;
+    }
+
     .ferris-corner {
-        bottom: 10px;
-        left: 10px;
-    }
-    
-    .ferris-corner img {
         width: 80px;
-        height: 80px;
+        left: 10px;
+        bottom: 10px;
     }
 }
 
-/* Title slide specific styles */
-.reveal .slides section:first-child {
-    text-align: center;
-    padding: 2em;
+/* Syntax highlighting overrides */
+.hljs {
+    background: #1e1e1e !important;
+    color: #d4d4d4 !important;
 }
 
-.reveal .slides section:first-child h1 {
-    font-size: 3em;
-    margin-bottom: 0.5em;
-    color: #333;
-    text-transform: none;
+.hljs-keyword {
+    color: #569cd6 !important;
 }
 
-.reveal .slides section:first-child h3 {
-    font-size: 1.8em;
-    margin-bottom: 1.5em;
-    color: #666;
-    font-weight: 400;
+.hljs-type {
+    color: #4ec9b0 !important;
 }
 
-.reveal .slides section:first-child p {
-    font-size: 1.2em;
-    margin: 0.5em 0;
-    color: #666;
+.hljs-string {
+    color: #ce9178 !important;
 }
 
-.reveal .slides section:first-child .conference-info {
-    font-size: 1.4em;
-    font-weight: 600;
-    color: #42affa;
-    margin: 1em 0;
+.hljs-number {
+    color: #b5cea8 !important;
 }
 
-.reveal .slides section:first-child .conference-date {
-    font-size: 1.2em;
-    color: #666;
-    margin: 0.5em 0;
+.hljs-comment {
+    color: #6a9955 !important;
 }
 
-.reveal .slides section:first-child .location {
-    font-size: 1.1em;
-    color: #666;
-    margin: 0.5em 0;
+.hljs-function {
+    color: #dcdcaa !important;
 }
 
-@media (max-width: 768px) {
-    .reveal .slides section:first-child h1 {
-        font-size: 2.2em;
-    }
-    
-    .reveal .slides section:first-child h3 {
-        font-size: 1.4em;
-    }
-    
-    .reveal .slides section:first-child p {
-        font-size: 1em;
-    }
-    
-    .reveal .slides section:first-child .conference-info {
-        font-size: 1.2em;
-    }
-    
-    .reveal .slides section:first-child .conference-date,
-    .reveal .slides section:first-child .location {
-        font-size: 1em;
-    }
+.hljs-variable {
+    color: #9cdcfe !important;
+}
+
+.hljs-operator {
+    color: #d4d4d4 !important;
+}
+
+/* Theme transition */
+.reveal, .reveal *, body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme colors */
+:root {
+    --r-background-color: #0a1930;
+    --r-heading-color: #60b5cc;
 } 

@@ -5,128 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asynchronous Programming in Python and Rust - PyCon DE & PyData 2025</title>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/favicon.ico">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    
-    <!-- Reveal.js -->
+    <!-- Reveal.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/white.css">
+    
+    <!-- Highlight.js and theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/vs2015.css">
+    
+    <!-- Custom styles -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Lottie Player -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    
-    <!-- Meta tags -->
-    <meta property="og:title" content="Asynchronous Programming in Python and Rust - PyCon DE & PyData 2025">
-    <meta property="og:description" content="A deep dive into concurrent optimization using genetic algorithms as a practical example">
-    <meta property="og:type" content="article">
-    <meta property="og:site_name" content="PyConDE & PyData">
 </head>
 <body>
     <div class="reveal">
         <div class="slides">
-            <!-- Section 1: Introduction -->
+            <!-- SECTION 1: INTRODUCTION -->
             <section>
-                <section>
-                    <h1>Asynchronous Programming in Python and Rust</h1>
-                    <h3>A Deep Dive into Concurrent Optimization</h3>
-                    <p>Your Name</p>
-                    <p class="conference-info">PyCon DE & PyData 2025</p>
-                    <p class="conference-date">April 23-25, 2025</p>
-                    <p class="location">Darmstadtium, Darmstadt (Frankfurt area), Germany</p>
-                </section>
-
-                <section>
-                    <h2>The Inciting Question</h2>
-                    <blockquote>
-                        "Would we want to expose the tokio event loop as the basis for a Python async runtime in the future?"
-                    </blockquote>
-                    <p>- David Hewitt</p>
-                    <div class="fragment">
-                        <img src="images/tokio-event-loop.png" alt="Tokio Event Loop Diagram">
-                    </div>
-                </section>
-
-                <section>
-                    <h2>Rust/Python Interop Growth</h2>
-                    <div class="graph-container">
-                        <img src="images/pypi-rust-growth.png" alt="PyPI Rust Growth Graph">
-                    </div>
-                    <ul>
-                        <li class="fragment">PyO3 impact on ecosystem</li>
-                        <li class="fragment">"RIIR" (Rewrite It In Rust) trend</li>
-                        <li class="fragment">10x-80x performance improvements</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Why It Matters</h2>
-                    <ul>
-                        <li class="fragment">Memory efficiency: Tokio vs alternatives</li>
-                        <li class="fragment">Upcoming Python free-threading in 3.13</li>
-                        <li class="fragment">Real-world performance implications</li>
-                    </ul>
-                </section>
+                <h1>Asynchronous Programming in Python and Rust</h1>
+                <h3>A Deep Dive into Concurrent Optimization</h3>
+                <p>Your Name</p>
+                <p class="conference-info">PyCon DE & PyData 2025</p>
+                <p class="conference-date">April 23-25, 2025</p>
+                <p class="location">Darmstadtium, Darmstadt, Germany</p>
             </section>
 
-            <!-- Section 2: Foundations -->
             <section>
-                <section>
-                    <h2>Concurrency vs Parallelism</h2>
-                    <img src="images/concurrency-parallelism.png" alt="Concurrency vs Parallelism Diagram">
-                    <p class="fragment">"If something happens in parallel, then it also happens concurrently, but the opposite is not true"</p>
-                </section>
+                <h2>The Inciting Question</h2>
+                <blockquote>
+                    "Would we want to expose the tokio event loop as the basis for a Python async runtime in the future?"
+                </blockquote>
+                <p>— David Hewitt (GitHub sponsor)</p>
+                <div class="chart-placeholder">
+                    [Diagram: Tokio event loop]
+                </div>
+            </section>
 
-                <section>
-                    <h2>CPU-bound vs IO-bound Tasks</h2>
-                    <div class="two-column">
-                        <div>
-                            <h3>CPU-bound</h3>
-                            <ul>
-                                <li>Video processing</li>
-                                <li>Mathematical computations</li>
-                                <li>Genetic algorithms</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3>IO-bound</h3>
-                            <ul>
-                                <li>File downloads</li>
-                                <li>Database queries</li>
-                                <li>Network requests</li>
-                            </ul>
-                        </div>
+            <section>
+                <h2>Rust/Python Interop Growth</h2>
+                <div class="chart-placeholder">
+                    [Graph: Growth of PyPI packages with Rust components]
+                </div>
+                <ul>
+                    <li>PyO3's impact on ecosystem</li>
+                    <li>"RIIR" (Rewrite It In Rust) for 10x-80x performance improvements</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Why It Matters</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h3>Memory Efficiency</h3>
+                        <ul>
+                            <li>Tokio vs Go</li>
+                            <li>Tokio vs BEAM VM languages</li>
+                        </ul>
                     </div>
-                </section>
+                    <div class="column">
+                        <h3>Future Impact</h3>
+                        <ul>
+                            <li>Python free-threading in 3.13</li>
+                            <li>Integration opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-                <section>
-                    <h2>Async Programming Models</h2>
-                    <ul>
-                        <li class="fragment">Message passing vs shared state</li>
-                        <li class="fragment">Structured concurrency</li>
-                        <li class="fragment">Python async evolution:
-                            <ul>
-                                <li>Twisted → generators → asyncio → Trio</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </section>
+            <!-- SECTION 2: FOUNDATIONS OF ASYNC PROGRAMMING -->
+            <section>
+                <h2>Foundations of Async Programming</h2>
+                <h3>Concurrency vs Parallelism</h3>
+                <div class="chart-placeholder">
+                    [Diagram: Concurrency vs Parallelism from Rust book]
+                </div>
+                <p>"If something happens in parallel, then it also happens concurrently, but the opposite is not true"</p>
+            </section>
 
-                <section>
-                    <h2>Rayon: Simple Parallelism in Rust</h2>
-                    <pre><code data-trim>
-use rayon::prelude::*; 
+            <section>
+                <h2>CPU-bound vs IO-bound Tasks</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h3>CPU-bound</h3>
+                        <ul>
+                            <li>Video export</li>
+                            <li>Image processing</li>
+                            <li>Complex calculations</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>IO-bound</h3>
+                        <ul>
+                            <li>File downloads</li>
+                            <li>Database queries</li>
+                            <li>Network operations</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Async Programming Models</h2>
+                <ul>
+                    <li>Message passing vs shared state</li>
+                    <li>Structured concurrency</li>
+                    <li>Brief Python async history:
+                        <ul>
+                            <li>Twisted → generators → asyncio → Trio</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Rayon: Simple Parallelism in Rust</h2>
+                <pre><code class="rust">use rayon::prelude::*; 
+
 fn counter() -> u32 { 
     let mut counter: u32 = 0; 
     for _ in 0..1_000_000 { counter += 1; } 
     counter 
 } 
+
 fn main() { 
     let range: Vec<u32> = (0..8).collect(); 
     let counter: u32 = range
@@ -134,177 +136,307 @@ fn main() {
         .map(|_| counter())
         .sum(); 
     println!("{counter}"); 
-}
-                    </code></pre>
-                    <p class="fragment">"Great for existing iterator chains"</p>
-                </section>
-
-                <section>
-                    <h2>Tokio: Async Runtime in Rust</h2>
-                    <ul>
-                        <li class="fragment">Event loop model</li>
-                        <li class="fragment">Tasks, Spawning, and Futures</li>
-                        <li class="fragment">Channels for communication</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Python's Async Approaches</h2>
-                    <ul>
-                        <li class="fragment">concurrent.futures vs asyncio</li>
-                        <li class="fragment">InterpreterPoolExecutors</li>
-                        <li class="fragment">Strengths and limitations</li>
-                    </ul>
-                </section>
+}</code></pre>
+                <p>"Great for existing iterator chains"</p>
             </section>
 
-            <!-- Section 3: Case Study -->
             <section>
-                <section>
-                    <h2>"A Million Monkeys at a Million Typewriters"</h2>
-                    <p>Introducing our genetic algorithm that evolves random text into Hamlet quotes</p>
-                    <p class="fragment">"Brevity is the soul of wit" (joke about optimization)</p>
-                </section>
+                <h2>Tokio: Async Runtime in Rust</h2>
+                <ul>
+                    <li>Event loop model</li>
+                    <li>Tasks, Spawning, and Futures</li>
+                    <li>Channels for communication</li>
+                </ul>
+                <pre><code class="rust">use tokio::sync::mpsc;
 
-                <section>
-                    <h2>Key Parameters in Genetic Algorithms</h2>
-                    <ul>
-                        <li class="fragment">Population size: Controls exploration breadth</li>
-                        <li class="fragment">Mutation rate: Enables discovering new traits</li>
-                        <li class="fragment">Selection pressure: Balances exploitation vs exploration</li>
-                        <li class="fragment">Crossover rate: Combines successful traits</li>
-                    </ul>
-                </section>
+#[tokio::main]
+async fn main() {
+    let (tx, mut rx) = mpsc::channel(100);
+    
+    tokio::spawn(async move {
+        for i in 0..10 {
+            tx.send(i).await.unwrap();
+        }
+    });
+    
+    while let Some(i) = rx.recv().await {
+        println!("got = {}", i);
+    }
+}</code></pre>
+            </section>
 
-                <section>
-                    <h2>Implementation in Python</h2>
-                    <pre><code data-trim data-noescape>
-def evolve_text(target_text, population_size=100, 
-                mutation_rate=0.1, selection_pressure=0.1, 
-                crossover_rate=0.7):
-                    </code></pre>
-                    <p class="fragment">Note different implementations in evolve_text() vs main()</p>
-                </section>
-
-                <section>
-                    <h2>Visualizing Crossover in High-Dimensional Space</h2>
-                    <div class="fragment">
-                        <img src="images/crossover-visualization.png" alt="Crossover Visualization">
+            <section>
+                <h2>Python's Async Approaches</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h3>concurrent.futures</h3>
+                        <ul>
+                            <li>ThreadPoolExecutor</li>
+                            <li>ProcessPoolExecutor</li>
+                        </ul>
                     </div>
-                </section>
-
-                <section>
-                    <h2>Initial Parallelization Strategy</h2>
-                    <div class="fragment">
-                        <img src="images/parallel-fitness.png" alt="Parallel Fitness Calculation">
+                    <div class="column">
+                        <h3>asyncio</h3>
+                        <ul>
+                            <li>Event loop</li>
+                            <li>coroutines</li>
+                            <li>Tasks</li>
+                        </ul>
                     </div>
-                </section>
+                </div>
+                <p>InterpreterPoolExecutors (future)</p>
+            </section>
 
-                <section>
-                    <h2>Identifying Parallelism Opportunities</h2>
-                    <ul>
-                        <li class="fragment">Fitness calculation: Embarrassingly parallel</li>
-                        <li class="fragment">Selection: Limited parallelism (requires sorting)</li>
-                        <li class="fragment">Reproduction: Moderately parallel</li>
-                    </ul>
-                </section>
+            <!-- SECTION 3: CASE STUDY - GENETIC ALGORITHM -->
+            <section>
+                <h2>Case Study: Genetic Algorithm</h2>
+                <h3>"A Million Monkeys at a Million Typewriters"</h3>
+                <p>Evolving random text into Hamlet quotes</p>
+                <blockquote>"Brevity is the soul of wit"</blockquote>
+                <p><em>(Also the soul of optimization)</em></p>
+            </section>
 
-                <section>
-                    <h2>Tournament Selection</h2>
-                    <pre><code data-trim data-noescape>
-def tournament_selection(population, tournament_size=2):
-    selected = []
-    for _ in range(len(population)):
-        tournament = random.sample(population, tournament_size)
-        winner = max(tournament, key=lambda x: x.fitness)
-        selected.append(winner)
-    return selected
-                    </code></pre>
-                </section>
+            <section>
+                <h2>Key Parameters in Genetic Algorithms</h2>
+                <ul>
+                    <li><strong>Population size:</strong> Controls exploration breadth</li>
+                    <li><strong>Mutation rate:</strong> Enables discovering new traits</li>
+                    <li><strong>Selection pressure:</strong> Balances exploitation vs exploration</li>
+                    <li><strong>Crossover rate:</strong> Combines successful traits</li>
+                </ul>
+            </section>
 
-                <section>
-                    <h2>Asynchronous Genetic Algorithm Design</h2>
-                    <ul>
-                        <li>Worker Pool → Task Queue</li>
-                        <li>Task Queue → Results Queue</li>
-                        <li>Results Queue → Population Manager</li>
-                    </ul>
-                </section>
+            <section>
+                <h2>Implementation in Python</h2>
+                <pre><code class="python">def evolve_text(target, pop_size=1000, mutation_rate=0.01):
+    # Create initial population
+    population = [''.join(random.choice(CHARS) 
+                for _ in range(len(target))) 
+                for _ in range(pop_size)]
+    
+    generation = 0
+    best_fit = 0
+    
+    while best_fit < len(target):
+        # Calculate fitness for each member
+        fitness_scores = [calculate_fitness(p, target) 
+                         for p in population]
+        
+        # Selection and reproduction
+        new_population = []
+        for _ in range(pop_size):
+            parent1 = selection(population, fitness_scores)
+            parent2 = selection(population, fitness_scores)
+            child = crossover(parent1, parent2)
+            child = mutate(child, mutation_rate)
+            new_population.append(child)
+            
+        population = new_population
+        # ... rest of implementation</code></pre>
+                <p><em>Different implementations in evolve_text() vs main()</em></p>
+            </section>
 
-                <section>
-                    <h2>Generation-Aware Approach</h2>
-                    <ul>
-                        <li class="fragment">Maintaining generational boundaries</li>
-                        <li class="fragment">PopulationMember dataclass</li>
-                        <li class="fragment">Thread-safe management</li>
-                    </ul>
-                </section>
+            <section>
+                <h2>Visualizing Crossover in High-Dimensional Space</h2>
+                <ul>
+                    <li>40-character string = 40D vector</li>
+                    <li>Single-point crossover at position 15</li>
+                    <li>Combining orthogonal projections</li>
+                </ul>
+                <div class="chart-placeholder">
+                    [Visualization of string crossover in vector space]
+                </div>
+            </section>
 
-                <section>
-                    <h2>Optimized Population Data Structure</h2>
-                    <pre><code data-trim data-noescape>
-class Population:
-    def __init__(self):
-        self.members = {}
+            <section>
+                <h2>Initial Parallelization Strategy</h2>
+                <div class="chart-placeholder">
+                    [Diagram: Parallel fitness calculation pipeline]
+                </div>
+                <p>Pipeline model: fitness → selection → crossover/mutation</p>
+            </section>
+
+            <section>
+                <h2>Identifying Parallelism Opportunities</h2>
+                <ul>
+                    <li><strong>Fitness calculation:</strong> Embarrassingly parallel</li>
+                    <li><strong>Selection:</strong> Limited parallelism (requires sorting)</li>
+                    <li><strong>Reproduction:</strong> Moderately parallel</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tournament Selection</h2>
+                <ul>
+                    <li>Alternative to global sorting</li>
+                    <li>Independent tournaments = better parallelism</li>
+                </ul>
+                <pre><code class="python">async def tournament_selection(population, fitness_func, tournament_size=5):
+    # Select random individuals for tournament
+    tournament = random.sample(population, tournament_size)
+    
+    # Calculate fitness in parallel
+    tasks = [asyncio.create_task(fitness_func(ind)) 
+             for ind in tournament]
+    fitness_values = await asyncio.gather(*tasks)
+    
+    # Return the winner
+    return tournament[fitness_values.index(max(fitness_values))]</code></pre>
+            </section>
+
+            <section>
+                <h2>Asynchronous Genetic Algorithm Design</h2>
+                <div class="chart-placeholder">
+                    [Mermaid diagram: Worker pool and data flow]
+                </div>
+                <p>Reduced synchronization points</p>
+            </section>
+
+            <section>
+                <h2>Generation-Aware Approach</h2>
+                <ul>
+                    <li>Maintaining generational boundaries</li>
+                    <li>Thread-safe management</li>
+                    <li>Halting conditions implementation</li>
+                </ul>
+                <pre><code class="python">@dataclass
+class PopulationMember:
+    genome: str
+    generation: int
+    fitness: Optional[float] = None
+    
+    def calculate_fitness(self, target):
+        # Calculate and cache fitness
+        if self.fitness is None:
+            self.fitness = sum(c1 == c2 for c1, c2 
+                              in zip(self.genome, target))
+        return self.fitness</code></pre>
+            </section>
+
+            <section>
+                <h2>Optimized Population Data Structure</h2>
+                <ul>
+                    <li>Single central dictionary with generation index</li>
+                    <li>Memory efficiency considerations</li>
+                    <li>Automatic cleanup of older generations</li>
+                </ul>
+                <pre><code class="python">class Population:
+    def __init__(self, max_generations_to_keep=3):
+        self.members = {}  # {generation: [members]}
+        self.max_generations = max_generations_to_keep
         self.current_generation = 0
-                    </code></pre>
-                </section>
-
-                <section>
-                    <h2>Performance Comparison</h2>
-                    <div class="fragment">
-                        <img src="images/flame-graph.png" alt="Flame Graph Comparison">
-                    </div>
-                </section>
+        self.lock = asyncio.Lock()
+        
+    async def add_member(self, member):
+        async with self.lock:
+            if member.generation not in self.members:
+                self.members[member.generation] = []
+            self.members[member.generation].append(member)
+            
+    async def cleanup_old_generations(self):
+        async with self.lock:
+            generations = sorted(self.members.keys())
+            to_remove = generations[:-self.max_generations] if len(generations) > self.max_generations else []
+            for gen in to_remove:
+                del self.members[gen]</code></pre>
             </section>
 
-            <!-- Section 4: Conclusion -->
             <section>
-                <section>
-                    <h2>Evolution of Our Implementation</h2>
-                    <ul>
-                        <li class="fragment">Initial implementation</li>
-                        <li class="fragment">Understanding execution model</li>
-                        <li class="fragment">Tournament selection for parallelism</li>
-                        <li class="fragment">Generation-aware asynchronous approach</li>
-                    </ul>
-                </section>
+                <h2>Performance Comparison</h2>
+                <div class="chart-placeholder">
+                    [Flame graph comparing Python vs Rust implementation]
+                </div>
+                <p>Key bottlenecks identified:</p>
+                <ul>
+                    <li>Fitness calculation in Python</li>
+                    <li>GIL contention</li>
+                    <li>Memory allocation patterns</li>
+                </ul>
+            </section>
 
-                <section>
-                    <h2>Returning to the Initial Question</h2>
-                    <p class="fragment">"Would Pythonistas benefit from free-threaded Python atop the Tokio runtime?"</p>
-                </section>
+            <!-- SECTION 4: CONCLUSION -->
+            <section>
+                <h2>Evolution of Our Implementation</h2>
+                <ol>
+                    <li>Initial implementation</li>
+                    <li>Understanding execution model</li>
+                    <li>Tournament selection for parallelism</li>
+                    <li>Generation-aware asynchronous approach</li>
+                </ol>
+            </section>
 
-                <section>
-                    <h2>Next Steps and Resources</h2>
-                    <ul>
-                        <li class="fragment">Discord communities</li>
-                        <li class="fragment">Learning resources</li>
-                        <li class="fragment">Contact information</li>
-                    </ul>
-                </section>
+            <section>
+                <h2>Returning to the Initial Question</h2>
+                <blockquote>
+                    "Would Pythonistas benefit from free-threaded Python atop the Tokio runtime?"
+                </blockquote>
+                <p>My thoughts:</p>
+                <ul>
+                    <li>Potential for substantial performance gains</li>
+                    <li>Challenges in API design and mental model</li>
+                    <li>Integration complexity considerations</li>
+                </ul>
+            </section>
 
-                <section>
-                    <h2>Sources and Credits</h2>
-                    <ul>
-                        <li>Rust programming language book</li>
-                        <li>Tokio glossary</li>
-                        <li>Arden labs: Fearless Concurrency in Rust</li>
-                        <li>David Hewitt Rust Nation UK talk</li>
-                        <li>Personal correspondence</li>
-                    </ul>
-                </section>
+            <section>
+                <h2>Next Steps and Resources</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h3>Communities</h3>
+                        <ul>
+                            <li>Discord: #python-rust-interop</li>
+                            <li>Reddit: r/rustpython</li>
+                            <li>GitHub: PyO3 organization</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Learning Resources</h3>
+                        <ul>
+                            <li>Rust Book</li>
+                            <li>Tokio Documentation</li>
+                            <li>asyncio Documentation</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>Your Contact Information:</p>
+                <p>email@example.com | @twitter_handle | github.com/username</p>
+            </section>
+
+            <section>
+                <h2>Sources and Credits</h2>
+                <ul>
+                    <li>Rust programming language book, rustlings, rust by example</li>
+                    <li>Tokio glossary</li>
+                    <li>Arden labs: Fearless Concurrency in Rust series</li>
+                    <li>Piotr's performance benchmarking</li>
+                    <li>David Hewitt Rust Nation UK talk</li>
+                    <li>Evgenii Seliversov: Parallel Programming in Rust techniques</li>
+                    <li>Personal correspondence</li>
+                    <li>Claude assistance</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Thank You!</h1>
+                <h3>Questions?</h3>
             </section>
         </div>
     </div>
 
-    <!-- Ferris mascot -->
-    <div class="ferris-corner">
-        <img src="assets/ferris.svg" alt="Ferris the Rust mascot" width="100" height="100">
-    </div>
-
-    <!-- Scripts -->
+    <!-- Load all scripts at the end of body -->
+    <!-- Core libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/languages/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/languages/rust.min.js"></script>
+    
+    <!-- Reveal.js and its plugins -->
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/math/math.js"></script>
+    
+    <!-- Custom script - load last -->
     <script src="script.js"></script>
 </body>
 </html> 
