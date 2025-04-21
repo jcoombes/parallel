@@ -185,21 +185,6 @@ body.dark-mode {
     opacity: 0.8;
 }
 
-/* Ferris mascot */
-.ferris-corner {
-    position: fixed;
-    left: 20px;
-    bottom: 20px;
-    width: 100px;
-    height: auto;
-    z-index: 1000;
-    transition: transform 0.3s ease;
-}
-
-.ferris-corner:hover {
-    transform: scale(1.1);
-}
-
 /* Progress bar and controls */
 .reveal .progress {
     color: var(--accent-color);
@@ -218,12 +203,6 @@ body.dark-mode {
 
     .two-columns {
         grid-template-columns: 1fr;
-    }
-
-    .ferris-corner {
-        width: 80px;
-        left: 10px;
-        bottom: 10px;
     }
 }
 
@@ -274,4 +253,160 @@ body.dark-mode {
 :root {
     --r-background-color: #0a1930;
     --r-heading-color: #60b5cc;
+}
+
+/* Mermaid diagrams */
+.mermaid {
+    background: var(--background-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 90%;
+}
+
+/* Mermaid SVG container */
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Node styling */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+    fill: var(--blue-light);
+    stroke: var(--blue);
+}
+
+/* Node text */
+.mermaid .node .label {
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--background-color);
+}
+
+/* Edge styling */
+.mermaid .edgePath .path {
+    stroke: var(--blue-lighter);
+    stroke-width: 2px;
+}
+
+/* Edge labels */
+.mermaid .edgeLabel {
+    background-color: var(--background-color);
+    color: var(--blue-lighter);
+}
+
+/* Decision nodes */
+.mermaid .node.rhombus rect,
+.mermaid .node.diamond rect {
+    fill: var(--blue);
+    stroke: var(--blue-lighter);
+}
+
+.mermaid .node.rhombus .label,
+.mermaid .node.diamond .label {
+    color: white;
+}
+
+/* Ferris Animation */
+.ferris-runner {
+    position: fixed;
+    bottom: 20px;
+    width: 80px;
+    height: 80px;
+    z-index: 9999;
+    pointer-events: none;
+    left: -100px;
+    animation: run-across 60s linear infinite;
+    animation-delay: 480s; /* 8 minutes */
+}
+
+.ferris-runner img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Snakes Animation */
+.snakes-runner {
+    position: fixed;
+    bottom: 20px;
+    width: auto;
+    height: 80px;
+    z-index: 9999;
+    pointer-events: none;
+    right: -120px;
+    animation: run-across-snakes 60s linear infinite;
+    animation-delay: 480s; /* 8 minutes */
+}
+
+.snakes-runner img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+@keyframes run-across {
+    0% { 
+        left: -100px;
+        transform: scaleX(1);
+    }
+    4.67% { 
+        left: calc(100vw + 100px);
+        transform: scaleX(1);
+    }
+    46.67% {
+        left: calc(100vw + 100px);
+        transform: scaleX(-1);
+    }
+    50.33% {
+        left: -100px;
+        transform: scaleX(-1);
+    }
+    94.33% {
+        left: -100px;
+        transform: scaleX(1);
+    }
+    /* Stay still for the remaining time */
+    94.34%, 99% {
+        left: -100px;
+        transform: scaleX(1);
+    }
+    100% {
+        left: -100px;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes run-across-snakes {
+    0% { 
+        right: -120px;
+        transform: scaleX(1);
+    }
+    7% { 
+        right: calc(100vw + 120px);
+        transform: scaleX(1);
+    }
+    48.33% {
+        right: calc(100vw + 120px);
+        transform: scaleX(-1);
+    }
+    51.67% {
+        right: -120px;
+        transform: scaleX(-1);
+    }
+    95.67% {
+        right: -120px;
+        transform: scaleX(1);
+    }
+    /* Stay still for the remaining time */
+    95.68%, 99% {
+        right: -120px;
+        transform: scaleX(1);
+    }
+    100% {
+        right: -120px;
+        transform: scaleX(1);
+    }
 } 

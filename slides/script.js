@@ -5,19 +5,35 @@ document.addEventListener('DOMContentLoaded', () => {
         slideNumber: true,
         transition: 'slide',
         backgroundTransition: 'fade',
+        center: true,
+        controls: true,
+        progress: true,
+        history: true,
+
+        // Mermaid config
+        mermaid: {
+            theme: 'dark'
+        },
+
         plugins: [
             RevealMarkdown,
             RevealHighlight,
             RevealNotes,
-            RevealMath
+            RevealMath,
+            RevealMermaid
         ]
+    }).then(() => {
+        // Initialize syntax highlighting after Reveal is ready
+        if (window.hljs) {
+            hljs.configure({
+                languages: ['python', 'rust']
+            });
+            
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        }
     });
-
-    // Add Ferris to the corner
-    const ferris = document.createElement('img');
-    ferris.src = 'https://rustacean.net/assets/rustacean-flat-happy.svg';
-    ferris.className = 'ferris-corner';
-    document.body.appendChild(ferris);
 
     // Theme toggle state
     let isDarkMode = false;
@@ -60,24 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize syntax highlighting
-    hljs.configure({
-        languages: ['python', 'rust']
-    });
-    
-    document.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightBlock(block);
-    });
-});
+    // Add the snakes element to the page
+    const snakes = document.createElement('div');
+    snakes.className = 'snakes-runner';
+    snakes.innerHTML = '<img src="assets/two-snakes.svg" alt="Python Snakes">';
+    document.body.appendChild(snakes);
 
-// Add custom styles for blackout mode
-const style = document.createElement('style');
-style.textContent = `
-    body.blackout .reveal .slides {
-        visibility: hidden;
-    }
-    body.blackout {
-        background-color: #000;
-    }
-`;
-document.head.appendChild(style); 
+    // Add custom styles for blackout mode
+    const style = document.createElement('style');
+    style.textContent = `
+        body.blackout .reveal .slides {
+            visibility: hidden;
+        }
+        body.blackout {
+            background-color: #000;
+        }
+    `;
+    document.head.appendChild(style);
+}); 

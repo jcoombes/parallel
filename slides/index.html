@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Reveal.js CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reset.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/theme/black.css" id="theme">
     
     <!-- Highlight.js and theme -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/vs2015.css">
@@ -30,6 +30,62 @@
                 <p class="conference-info">PyCon DE & PyData 2025</p>
                 <p class="conference-date">April 23-25, 2025</p>
                 <p class="location">Darmstadtium, Darmstadt, Germany</p>
+            </section>
+
+            <!-- Talk Overview -->
+            <section>
+                <h2>Talk Overview</h2>
+                <ol>
+                    <li><strong>Inciting Incident</strong>
+                        <p>From a GitHub sponsor's question about Tokio to exploring the growing Python-Rust interoperability landscape.</p>
+                    </li>
+                    <li><strong>Asynchronous Concurrency</strong>
+                        <p>Exploring async foundations through Rayon and Tokio in Rust, compared with Python's evolving approaches.</p>
+                    </li>
+                    <li><strong>Case Study: Genetic Algorithm</strong>
+                        <p>Optimizing a text evolution algorithm from sequential to parallel implementation with tournament selection.</p>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- Test Mermaid Section with vertical slides -->
+            <section>
+                <!-- Top slide with basic diagram -->
+                <section>
+                    <h2>Test Mermaid Diagram</h2>
+                    <div class="mermaid">
+                        flowchart TD
+                            A[Start] --> B{Decision}
+                            B -->|Yes| C[Do Something]
+                            B -->|No| D[Do Nothing]
+                            C --> E[End]
+                            D --> E
+                    </div>
+                    <p><small>↓ Press down for more examples</small></p>
+                </section>
+
+                <!-- Example image slide -->
+                <section>
+                    <h2>Example Image</h2>
+                    <img src="images/flame-graph.png" alt="Example Flame Graph" style="height: 400px;">
+                    <p><small>Example performance flame graph visualization</small></p>
+                </section>
+
+                <!-- Example complex diagram slide -->
+                <section>
+                    <h2>Example Complex Diagram</h2>
+                    <div class="mermaid">
+                        flowchart LR
+                            A[Python Code] -->|PyO3| B{Rust Bridge}
+                            B -->|Async| C[Tokio Runtime]
+                            B -->|Sync| D[Native Thread]
+                            C -->|Events| E[IO Operations]
+                            D -->|Compute| F[CPU Tasks]
+                            E --> B
+                            F --> B
+                    </div>
+                    <p><small>Python-Rust interop architecture diagram</small></p>
+                </section>
             </section>
 
             <section>
@@ -119,9 +175,36 @@
                 </ul>
             </section>
 
+            <!-- Rayon section - vertical slide group -->
             <section>
-                <h2>Rayon: Simple Parallelism in Rust</h2>
-                <pre><code class="rust">use rayon::prelude::*; 
+                <!-- Main/top slide with concepts -->
+                <section>
+                    <h2>Rayon: Simple Parallelism in Rust</h2>
+                    <div class="two-columns">
+                        <div class="column">
+                            <h3>Iterator Traits</h3>
+                            <ul>
+                                <li><code>iter()</code>: Sequential iteration</li>
+                                <li><code>par_iter()</code>: Parallel iteration</li>
+                                <li>Drop-in replacement API</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h3>Key Features</h3>
+                            <ul>
+                                <li>Work stealing scheduler</li>
+                                <li>Data race prevention</li>
+                                <li>Automatic chunking</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p><small>↓ Press down for implementation example</small></p>
+                </section>
+
+                <!-- Code slide below -->
+                <section>
+                    <h2>Parallel Iterator Example</h2>
+                    <pre><code class="rust">use rayon::prelude::*; 
 
 fn counter() -> u32 { 
     let mut counter: u32 = 0; 
@@ -132,22 +215,34 @@ fn counter() -> u32 {
 fn main() { 
     let range: Vec<u32> = (0..8).collect(); 
     let counter: u32 = range
-        .par_iter()
+        .par_iter()  // Parallel iteration
         .map(|_| counter())
         .sum(); 
     println!("{counter}"); 
 }</code></pre>
-                <p>"Great for existing iterator chains"</p>
+                    <p><small>Simply changing <code>iter()</code> to <code>par_iter()</code> enables parallel execution</small></p>
+                </section>
             </section>
 
+            <!-- Tokio section - vertical slide group -->
             <section>
-                <h2>Tokio: Async Runtime in Rust</h2>
-                <ul>
-                    <li>Event loop model</li>
-                    <li>Tasks, Spawning, and Futures</li>
-                    <li>Channels for communication</li>
-                </ul>
-                <pre><code class="rust">use tokio::sync::mpsc;
+                <!-- Main/top slide with concepts -->
+                <section>
+                    <h2>Tokio: Async Runtime in Rust</h2>
+                    <ul>
+                        <li>Event loop model</li>
+                        <li>Tasks, Spawning, and Futures</li>
+                        <li>Channels for communication</li>
+                        <li>Zero-cost abstractions</li>
+                        <li>Efficient resource utilization</li>
+                    </ul>
+                    <p><small>↓ Press down for MPSC channel example</small></p>
+                </section>
+
+                <!-- Code slide below -->
+                <section>
+                    <h2>MPSC Channel Example</h2>
+                    <pre><code class="rust">use tokio::sync::mpsc;
 
 #[tokio::main]
 async fn main() {
@@ -163,6 +258,8 @@ async fn main() {
         println!("got = {}", i);
     }
 }</code></pre>
+                    <p><small>Multi-producer, single-consumer channel with backpressure control</small></p>
+                </section>
             </section>
 
             <section>
@@ -207,8 +304,36 @@ async fn main() {
             </section>
 
             <section>
-                <h2>Implementation in Python</h2>
-                <pre><code class="python">def evolve_text(target, pop_size=1000, mutation_rate=0.01):
+                <h2>Visualizing Crossover in High-Dimensional Space</h2>
+                <ul>
+                    <li>40-character string = 40D vector</li>
+                    <li>Single-point crossover at position 15</li>
+                    <li>Combining orthogonal projections</li>
+                </ul>
+                <div class="chart-placeholder">
+                    [Visualization of string crossover in vector space]
+                </div>
+            </section>
+
+            <!-- Python Implementation section - vertical slide group -->
+            <section>
+                <!-- Main/top slide with concepts -->
+                <section>
+                    <h2>Sequential Implementation</h2>
+                    <h3>Core Components</h3>
+                    <ul>
+                        <li><strong>Population Management:</strong> Random initialization and generational tracking</li>
+                        <li><strong>Fitness Calculation:</strong> Character-by-character matching</li>
+                        <li><strong>Selection:</strong> Fitness-proportional sampling</li>
+                        <li><strong>Reproduction:</strong> Crossover and mutation operations</li>
+                    </ul>
+                    <p><small>↓ Press down for code implementation</small></p>
+                </section>
+
+                <!-- Code slide below -->
+                <section>
+                    <h2>Basic Genetic Algorithm</h2>
+                    <pre><code class="python">def evolve_text(target, pop_size=1000, mutation_rate=0.01):
     # Create initial population
     population = [''.join(random.choice(CHARS) 
                 for _ in range(len(target))) 
@@ -233,19 +358,8 @@ async fn main() {
             
         population = new_population
         # ... rest of implementation</code></pre>
-                <p><em>Different implementations in evolve_text() vs main()</em></p>
-            </section>
-
-            <section>
-                <h2>Visualizing Crossover in High-Dimensional Space</h2>
-                <ul>
-                    <li>40-character string = 40D vector</li>
-                    <li>Single-point crossover at position 15</li>
-                    <li>Combining orthogonal projections</li>
-                </ul>
-                <div class="chart-placeholder">
-                    [Visualization of string crossover in vector space]
-                </div>
+                    <p><small>Sequential implementation - basis for our parallel optimizations</small></p>
+                </section>
             </section>
 
             <section>
@@ -265,13 +379,24 @@ async fn main() {
                 </ul>
             </section>
 
+            <!-- Tournament Selection - vertical slide group -->
             <section>
-                <h2>Tournament Selection</h2>
-                <ul>
-                    <li>Alternative to global sorting</li>
-                    <li>Independent tournaments = better parallelism</li>
-                </ul>
-                <pre><code class="python">async def tournament_selection(population, fitness_func, tournament_size=5):
+                <!-- Main/top slide -->
+                <section>
+                    <h2>Tournament Selection</h2>
+                    <ul>
+                        <li>Alternative to global sorting</li>
+                        <li>Independent tournaments = better parallelism</li>
+                        <li>Tunable selection pressure</li>
+                        <li>Natural fit for async/await pattern</li>
+                    </ul>
+                    <p><small>↓ Press down for implementation</small></p>
+                </section>
+
+                <!-- Code slide below -->
+                <section>
+                    <h2>Async Tournament Selection</h2>
+                    <pre><code class="python">async def tournament_selection(population, fitness_func, tournament_size=5):
     # Select random individuals for tournament
     tournament = random.sample(population, tournament_size)
     
@@ -282,45 +407,41 @@ async fn main() {
     
     # Return the winner
     return tournament[fitness_values.index(max(fitness_values))]</code></pre>
+                    <p><small>Concurrent fitness evaluation with minimal synchronization</small></p>
+                </section>
             </section>
 
             <section>
                 <h2>Asynchronous Genetic Algorithm Design</h2>
-                <div class="chart-placeholder">
-                    [Mermaid diagram: Worker pool and data flow]
+                <div class="mermaid">
+                    flowchart LR
+                        A[Population] --> B{Tournament<br/>Selection}
+                        B -->|Winners| C[Crossover]
+                        C --> D[Mutation]
+                        D --> E[Fitness<br/>Evaluation]
+                        E -->|Next Gen| A
+                        E -->|Best| F[Output]
                 </div>
                 <p>Reduced synchronization points</p>
             </section>
 
+            <!-- Optimized Population Data Structure - vertical slide group -->
             <section>
-                <h2>Generation-Aware Approach</h2>
-                <ul>
-                    <li>Maintaining generational boundaries</li>
-                    <li>Thread-safe management</li>
-                    <li>Halting conditions implementation</li>
-                </ul>
-                <pre><code class="python">@dataclass
-class PopulationMember:
-    genome: str
-    generation: int
-    fitness: Optional[float] = None
-    
-    def calculate_fitness(self, target):
-        # Calculate and cache fitness
-        if self.fitness is None:
-            self.fitness = sum(c1 == c2 for c1, c2 
-                              in zip(self.genome, target))
-        return self.fitness</code></pre>
-            </section>
+                <!-- Main/top slide -->
+                <section>
+                    <h2>Optimized Population Data Structure</h2>
+                    <ul>
+                        <li>Single central dictionary with generation index</li>
+                        <li>Memory efficiency considerations</li>
+                        <li>Automatic cleanup of older generations</li>
+                    </ul>
+                    <p><small>↓ Press down for implementation details</small></p>
+                </section>
 
-            <section>
-                <h2>Optimized Population Data Structure</h2>
-                <ul>
-                    <li>Single central dictionary with generation index</li>
-                    <li>Memory efficiency considerations</li>
-                    <li>Automatic cleanup of older generations</li>
-                </ul>
-                <pre><code class="python">class Population:
+                <!-- Code slide below -->
+                <section>
+                    <h2>Implementation Details</h2>
+                    <pre><code class="python">class Population:
     def __init__(self, max_generations_to_keep=3):
         self.members = {}  # {generation: [members]}
         self.max_generations = max_generations_to_keep
@@ -336,9 +457,12 @@ class PopulationMember:
     async def cleanup_old_generations(self):
         async with self.lock:
             generations = sorted(self.members.keys())
-            to_remove = generations[:-self.max_generations] if len(generations) > self.max_generations else []
+            to_remove = generations[:-self.max_generations] \
+                if len(generations) > self.max_generations else []
             for gen in to_remove:
                 del self.members[gen]</code></pre>
+                    <p><small>Thread-safe population management with generational garbage collection</small></p>
+                </section>
             </section>
 
             <section>
@@ -423,6 +547,11 @@ class PopulationMember:
         </div>
     </div>
 
+    <!-- Ferris Runner -->
+    <div class="ferris-runner">
+        <img src="https://rustacean.net/assets/rustacean-flat-happy.svg" alt="Ferris">
+    </div>
+
     <!-- Load all scripts at the end of body -->
     <!-- Core libraries -->
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/highlight.min.js"></script>
@@ -430,11 +559,14 @@ class PopulationMember:
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/languages/rust.min.js"></script>
     
     <!-- Reveal.js and its plugins -->
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/markdown/markdown.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/notes/notes.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/math/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/plugin/math/math.js"></script>
+    
+    <!-- Mermaid plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.4.1/plugin/mermaid/mermaid.min.js"></script>
     
     <!-- Custom script - load last -->
     <script src="script.js"></script>
