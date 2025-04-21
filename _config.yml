@@ -1,0 +1,3 @@
+# Github Pages serves the slides directory as a static site
+include:
+  - slides 
