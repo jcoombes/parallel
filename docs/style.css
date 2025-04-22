@@ -171,13 +171,18 @@ body.dark-mode {
 .conference-info {
     font-size: 1.2em;
     margin-bottom: 10px;
-    color: var(--accent-color);
+    color: var(--green-light);
 }
 
-.conference-date {
-    color: var(--green-light);
-    font-weight: bold;
+.conference-track {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: var(--orange);
 }
+
+/* .conference-date {
+    color: var(--pink-light);
+} */
 
 .location {
     font-style: italic;
@@ -262,6 +267,12 @@ body.dark-mode {
     padding: 20px;
     margin: 20px auto;
     max-width: 90%;
+    font-size: 1.2em;
+    width: 100%;
+}
+
+.reveal .mermaid {
+    font-size: 32px !important;
 }
 
 /* Mermaid SVG container */
@@ -276,38 +287,77 @@ body.dark-mode {
 .mermaid .node ellipse,
 .mermaid .node polygon,
 .mermaid .node path {
-    fill: var(--blue-light);
-    stroke: var(--blue);
+    fill: transparent;
+    stroke: var(--text-color);
+    stroke-width: 2px;
+    rx: 5px;
+    ry: 5px;
 }
 
 /* Node text */
 .mermaid .node .label {
-    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
-    color: var(--background-color);
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif !important;
+    color: var(--text-color) !important;
+    font-size: 24px !important;
+    padding: 12px 16px !important;
 }
 
 /* Edge styling */
 .mermaid .edgePath .path {
-    stroke: var(--blue-lighter);
+    stroke: var(--text-color);
     stroke-width: 2px;
 }
 
 /* Edge labels */
 .mermaid .edgeLabel {
     background-color: var(--background-color);
-    color: var(--blue-lighter);
+    color: var(--text-color);
+    font-size: 20px !important;
+}
+
+/* Subgraph styling */
+.mermaid .cluster rect {
+    fill: transparent;
+    stroke: var(--text-color);
+    stroke-width: 2px;
+    rx: 5px;
+    ry: 5px;
+    padding: 24px !important;
+}
+
+.mermaid .cluster .label {
+    color: var(--text-color) !important;
+    font-size: 28px !important;
+    padding: 12px !important;
+}
+
+.mermaid .cluster-label span p {
+    background-color: transparent !important;
+    font-size: 28px !important;
+}
+
+.mermaid #mermaid-* {
+    font-size: 24px !important;
+}
+
+.mermaid .label text, 
+.mermaid span,
+.mermaid p {
+    font-size: 24px !important;
+    color: var(--text-color) !important;
 }
 
 /* Decision nodes */
 .mermaid .node.rhombus rect,
 .mermaid .node.diamond rect {
-    fill: var(--blue);
-    stroke: var(--blue-lighter);
+    fill: transparent;
+    stroke: var(--text-color);
+    stroke-width: 2px;
 }
 
 .mermaid .node.rhombus .label,
 .mermaid .node.diamond .label {
-    color: white;
+    color: var(--text-color);
 }
 
 /* Ferris Animation */
@@ -409,4 +459,36 @@ body.dark-mode {
         right: -120px;
         transform: scaleX(1);
     }
+}
+
+/* Add padding to all nodes */
+.mermaid .node {
+    padding: 8px !important;
+    margin: 12px !important;
+}
+
+/* Increase spacing between nodes */
+.mermaid .edgePath {
+    stroke-width: 2px;
+    margin: 16px !important;
+}
+
+/* Make sure text has room */
+.mermaid text {
+    padding: 8px !important;
+}
+
+/* Override any SVG viewBox constraints */
+.mermaid svg {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Remove any fixed width/height constraints */
+.mermaid foreignObject {
+    overflow: visible !important;
+}
+
+.mermaid .label {
+    white-space: nowrap !important;
 } 

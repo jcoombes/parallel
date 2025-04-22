@@ -24,26 +24,29 @@
         <div class="slides">
             <!-- SECTION 1: INTRODUCTION -->
             <section>
-                <h1>Asynchronous Programming in Python and Rust</h1>
-                <h3>A Deep Dive into Concurrent Optimization</h3>
-                <p>Your Name</p>
+                <h1>🦀 Rüstzeit</h1>
+                <h3>Asynchronous and Concurrent Optimisation in Python and Rust</h3>
+                <p>Jamie Coombes</p>
                 <p class="conference-info">PyCon DE & PyData 2025</p>
-                <p class="conference-date">April 23-25, 2025</p>
-                <p class="location">Darmstadtium, Darmstadt, Germany</p>
+                <p class="conference-track">PyCon: Rust</p>
+                <p class="conference-date">23. - 25. April 2025</p>
+                <p class="location">Darmstadtium, Darmstadt, Deutschland</p>
             </section>
 
             <!-- Talk Overview -->
             <section>
-                <h2>Talk Overview</h2>
                 <ol>
-                    <li><strong>Inciting Incident</strong>
-                        <p>From a GitHub sponsor's question about Tokio to exploring the growing Python-Rust interoperability landscape.</p>
+                    <li><strong>Main Talk Question</strong>
+                        <p>Python/Rust Interop and David Hewitt's free-threaded python atop Tokio question.</p>
                     </li>
                     <li><strong>Asynchronous Concurrency</strong>
-                        <p>Exploring async foundations through Rayon and Tokio in Rust, compared with Python's evolving approaches.</p>
+                        <p>Exploring async foundations through Rayon and Tokio in Rust, compared with Python's approaches.</p>
                     </li>
-                    <li><strong>Case Study: Genetic Algorithm</strong>
-                        <p>Optimizing a text evolution algorithm from sequential to parallel implementation with tournament selection.</p>
+                    <li><strong>Case Study: A million monkeys at a million typewriters</strong>
+                        <p>Parallelising and benchmarking a genetic algorithm for evolving text into Shakespeare quotes.</p>
+                    </li>
+                    <li><strong>Conclusion</strong>
+                        <p>Exploring the future of Python/Rust Interop and the potential for free-threaded Python atop Tokio.</p>
                     </li>
                 </ol>
             </section>
@@ -88,27 +91,40 @@
                 </section>
             </section>
 
+            <!-- Inciting Question -->
             <section>
-                <h2>The Inciting Question</h2>
-                <blockquote>
-                    "Would we want to expose the tokio event loop as the basis for a Python async runtime in the future?"
-                </blockquote>
-                <p>— David Hewitt (GitHub sponsor)</p>
-                <div class="chart-placeholder">
-                    [Diagram: Tokio event loop]
-                </div>
+                <section>
+                    <h2>The Main Talk Question</h2>
+                    <blockquote>
+                        "Do we want to expose the tokio event loop as the basis for a Python async runtime?"
+                    </blockquote>
+                    <p>— David Hewitt <a href="https://x.com/davidhewittdev">@davidhewittdev</a> - Rust Nation UK 2025</p>
+                </section>
+
+                <!-- Async Runtime Diagram -->
+                <section>
+                    <h2>Wie, bitte?</h2>
+                    <img src="assets/tokio-based-python-runtime-dark.svg" alt="Comparison of single-threaded asyncio vs multi-threaded tokio-based Python runtime">
+                </section>
             </section>
 
+            <!-- Rust/Python Interop Growth -->
+             <section>
             <section>
-                <h2>Rust/Python Interop Growth</h2>
-                <div class="chart-placeholder">
-                    [Graph: Growth of PyPI packages with Rust components]
-                </div>
+                <h2>Python/Rust Interop Growth</h2>
+                <img src="images/pypi-rust-growth.png" alt="Growth of PyPI packages with Rust components.">
+            </section>
+            <section>
                 <ul>
-                    <li>PyO3's impact on ecosystem</li>
-                    <li>"RIIR" (Rewrite It In Rust) for 10x-80x performance improvements</li>
+                    <h2>Rust/Python Interop Growth</h2>
+                    <li>Rust language as preferred developer-experience for writing native python extensions.</li>
+                    <li>RIIR - Rewrite It In Rust - for 10x-80x* performance improvements</li>
+                    <li>PyO3 is the most popular Rust library for Python interop.</li>
+                    <li>Maturin is the most popular tool for building and distributing Rust Python packages.</li>
+                    <small>*performance benchmarking is hard, see flame graphs later</small>
                 </ul>
             </section>
+        </section>
 
             <section>
                 <h2>Why It Matters</h2>
@@ -128,6 +144,16 @@
                         </ul>
                     </div>
                 </div>
+            </section>
+
+            <section>
+                <h2>Free Threading in Python</h2>
+                <p>Python 3.13 shipped an experimental variant without the "Global Interpreter Lock"
+                <ul>
+                    <li>Expected to become the default in a few years</li>
+                    <li>PyO3 supports fully</li>
+                    <li>Rust's Send + Sync traits make it straightforward to reason about threading issues</li>
+                </ul>
             </section>
 
             <!-- SECTION 2: FOUNDATIONS OF ASYNC PROGRAMMING -->
