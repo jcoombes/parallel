@@ -91,223 +91,532 @@
                 </section>
             </section>
 
+            <!-- Rust/Python Interop Growth -->
+            <section>
+                <section>
+                    <h2>Python/Rust Interop Growth in 2025</h2>
+                    <img src="images/pypi-rust-growth.png" alt="Growth of PyPI packages with Rust components.">
+                </section>
+                <section>
+                    <ul>
+                        <h2>Rust/Python Interop Growth in 2025</h2>
+                        <li>Rust language as preferred developer-experience for writing native python extensions.</li>
+                        <li>RIIR - Rewrite It In Rust - for 10x-80x* performance improvements</li>
+                        <li>PyO3 is the most popular Rust library for Python interop.</li>
+                        <li>Maturin is the most popular tool for building and distributing Rust Python packages.</li>
+                        <small>*performance benchmarking is hard, see flame graphs later</small>
+                    </ul>
+                </section>
+            </section>
+    
+
             <!-- Inciting Question -->
             <section>
                 <section>
-                    <h2>The Main Talk Question</h2>
+                    <h2>The Main Talk Questions</h2>
                     <blockquote>
                         "Do we want to expose the tokio event loop as the basis for a Python async runtime?"
                     </blockquote>
                     <p>— David Hewitt <a href="https://x.com/davidhewittdev">@davidhewittdev</a> - Rust Nation UK 2025</p>
+                    <blockquote>
+                        "How will free-threaded Python lead to better parallel code?"
+                    </blockquote>
+                    <p>- me, today, right now</p>
                 </section>
 
                 <!-- Async Runtime Diagram -->
                 <section>
-                    <h2>Wie, bitte?</h2>
+                    <h2>Free-threaded Python + Tokio = ??</h2>
                     <img src="assets/tokio-based-python-runtime-dark.svg" alt="Comparison of single-threaded asyncio vs multi-threaded tokio-based Python runtime">
                 </section>
             </section>
 
-            <!-- Rust/Python Interop Growth -->
-             <section>
-            <section>
-                <h2>Python/Rust Interop Growth</h2>
-                <img src="images/pypi-rust-growth.png" alt="Growth of PyPI packages with Rust components.">
-            </section>
-            <section>
-                <ul>
-                    <h2>Rust/Python Interop Growth</h2>
-                    <li>Rust language as preferred developer-experience for writing native python extensions.</li>
-                    <li>RIIR - Rewrite It In Rust - for 10x-80x* performance improvements</li>
-                    <li>PyO3 is the most popular Rust library for Python interop.</li>
-                    <li>Maturin is the most popular tool for building and distributing Rust Python packages.</li>
-                    <small>*performance benchmarking is hard, see flame graphs later</small>
-                </ul>
-            </section>
-        </section>
-
-            <section>
-                <h2>Why It Matters</h2>
-                <div class="two-columns">
-                    <div class="column">
-                        <h3>Memory Efficiency</h3>
-                        <ul>
-                            <li>Tokio vs Go</li>
-                            <li>Tokio vs BEAM VM languages</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h3>Future Impact</h3>
-                        <ul>
-                            <li>Python free-threading in 3.13</li>
-                            <li>Integration opportunities</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
             <section>
                 <h2>Free Threading in Python</h2>
-                <p>Python 3.13 shipped an experimental variant without the "Global Interpreter Lock"
+                <p>Python 3.13 shipped an <italic>experimental</italic> variant without the "Global Interpreter Lock"
                 <ul>
                     <li>Expected to become the default in a few years</li>
-                    <li>PyO3 supports fully</li>
+                    <li>PyO3 supports 3.13t fully</li>
                     <li>Rust's Send + Sync traits make it straightforward to reason about threading issues</li>
                 </ul>
             </section>
 
-            <!-- SECTION 2: FOUNDATIONS OF ASYNC PROGRAMMING -->
+            <!-- Tokio-based Python Runtime benefits-->
             <section>
-                <h2>Foundations of Async Programming</h2>
-                <h3>Concurrency vs Parallelism</h3>
-                <div class="chart-placeholder">
-                    [Diagram: Concurrency vs Parallelism from Rust book]
-                </div>
-                <p>"If something happens in parallel, then it also happens concurrently, but the opposite is not true"</p>
+                <section>
+                    <h2>A multi-threaded tokio-based Python runtime could be...</h2>
+                </section>
+                <section>
+                    <h2>Memory Efficient (and hence scalable)</h2>
+                        <img src="images/tokio-memory-usage-10k.png" alt="Comparison of memory usage between tokio and other async runtimes">
+                        <p>Image source: <a href="https://pkolaczk.github.io/memory-consumption-of-async/">Pkolaczk's memory-consumption-of-async</a></p>
+                </section>
+                <section>
+                    <h2>...well past os.cpu_count() threads</h2>
+                    <div class="chart-placeholder">
+                        <img src="images/tokio-memory-usage-1M.png" alt="Comparison of memory usage between tokio and other async runtimes">
+                        <p>Image source: <a href="https://pkolaczk.github.io/memory-consumption-of-async/">Pkolaczk's memory-consumption-of-async</a></p>
+                    </div>
+                </section>
+                <section>
+                    <h2>Typed to prevent data races</h2>
+                    <ul>
+                        <li>Rust's ownership model guarantees thread safety at compile time</li>
+                        <li>Rich ecosystem of threading primitives (std::sync, parking_lot, crossbeam)</li>
+                        <li>Threading can complement or replace async patterns</li>
+                    </ul>
+                    <p><small>Note: While Rust prevents data races, it can't prevent all concurrency bugs (deadlocks, algorithmic issues)</small></p>
+                </section>
+                <section>
+                    <h2>Faster</h2>
+                    <p>so you add :rocket: to your project README</p>
+                </section>
             </section>
 
             <section>
-                <h2>CPU-bound vs IO-bound Tasks</h2>
+                <section>
+                    <h2>okay, but I really like python</h2>
+                    <p>what are the multi-threaded async alternatives?</p>
+                    <p>well there is threado...</p>
+                </section>
+                <section>
+                    <h2>but threado is deado</h2>
+                    <div class="chart-placeholder">
+                        <img src="images/threado-dead.png" alt="threado is super dead">
+                    </div>
+                    <p>maybe ask <a href="@dabeaz@mastodon.social">@dabeaz</a> to bring it back for 3.14t or 3.15t?</p>
+                    <p>or just do dabeaz's <a href="https://www.dabeaz.com/summer.html">summer of rust</a> and create a tokio-based python runtime?</p>
+                </section>
+            </section>
+
+            <section>
+                <h2>How do rust and python think about concurrency and parallelism?</h2>
+            </section>
+
+            <!-- Section 2 Overview -->
+            <section>
+                <h2>Section 2: Foundations of Async Programming</h2>
+                <p>The evolution of concurrency models in Python and Rust</p>
+            </section>
+
+            <!-- Python Evolution -->
+            <section>
+                <section>
+                    <h2>Python's Async Evolution</h2>
+                    <div class="mermaid">
+                        flowchart LR
+                            A[Twisted<br>pre-generators] --> B[Twisted<br>with generators]
+                            B --> C[asyncio]
+                            C --> D[Trio]
+                            D --> E[anyio]
+                    </div>
+                    <p>A journey from explicit to implicit concurrency control</p>
+                    <p><small>↓ Press down for examples</small></p>
+                </section>
+                
+                <!-- Twisted without generators -->
+                <section>
+                    <h3>Twisted (pre-generators)</h3>
+                    <pre><code class="python">from twisted.internet import reactor, defer
+
+def get_data():
+    d = defer.Deferred()
+    # Simulate async operation
+    reactor.callLater(1, lambda: d.callback("Result"))
+    return d
+
+def handle_result(result):
+    print(f"Got: {result}")
+    reactor.stop()
+
+def handle_error(failure):
+    print(f"Error: {failure}")
+    reactor.stop()
+
+d = get_data()
+d.addCallbacks(handle_result, handle_error)
+
+reactor.run()</code></pre>
+                    <p><small>Explicit callback-based approach using Deferreds</small></p>
+                </section>
+                
+                <!-- Twisted with generators -->
+                <section>
+                    <h3>Twisted with generators (inlineCallbacks)</h3>
+                    <pre><code class="python">from twisted.internet import reactor, defer
+from twisted.internet.defer import inlineCallbacks
+
+@inlineCallbacks
+def async_operation():
+    try:
+        result1 = yield get_data()
+        result2 = yield get_more_data(result1)
+        print(f"Final result: {result2}")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        reactor.stop()
+
+reactor.callWhenRunning(async_operation)
+reactor.run()</code></pre>
+                    <p><small>Semi-implicit coroutines using yield</small></p>
+                </section>
+                
+                <!-- asyncio -->
+                <section>
+                    <h3>asyncio (Python 3.5+)</h3>
+                    <pre><code class="python">import asyncio
+
+async def get_data():
+    await asyncio.sleep(1)  # Simulate async operation
+    return "Result"
+
+async def main():
+    try:
+        result1 = await get_data()
+        result2 = await process_data(result1)
+        print(f"Final result: {result2}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+asyncio.run(main())</code></pre>
+                    <p><small>Fully implicit coroutines with async/await syntax</small></p>
+                </section>
+                
+                <!-- Trio -->
+                <section>
+                    <h3>Trio (Structured Concurrency)</h3>
+                    <pre><code class="python">import trio
+
+async def connect(addr):
+    # ... connection attempt logic
+    return socket
+
+async def main():
+    async with trio.open_nursery() as nursery:
+        for addr in addresses:
+            nursery.start_soon(connect, addr)
+            
+    # We only get here when ALL tasks are done
+    print("All connections complete")</code></pre>
+                    <p><small>Structured concurrency with explicit task relationships</small></p>
+                </section>
+                
+                <!-- anyio -->
+                <section>
+                    <h3>anyio: Unifying asyncio and Trio</h3>
+                    <pre><code class="python">import anyio
+
+async def main():
+    async with anyio.create_task_group() as tg:
+        for addr in addresses:
+            tg.start_soon(connect_to, addr)
+    
+    # Works on both asyncio and trio backends
+    
+# Run with asyncio backend
+anyio.run(main, backend="asyncio")
+
+# Or with trio backend
+anyio.run(main, backend="trio")</code></pre>
+                    <p><small>2.4M monthly downloads, powers httpx, FastAPI, Pydantic AI</small></p>
+                </section>
+            </section>
+
+            <!-- Memory Safety vs Liveness -->
+            <section>
+                <h2>Memory Safety vs Liveness</h2>
                 <div class="two-columns">
                     <div class="column">
-                        <h3>CPU-bound</h3>
+                        <h3>Memory Safety</h3>
                         <ul>
-                            <li>Video export</li>
-                            <li>Image processing</li>
-                            <li>Complex calculations</li>
+                            <li>Prevents undefined behavior from invalid memory access</li>
+                            <li>Avoids segmentation faults, buffer overflows, use-after-free</li>
+                            <li>Focus of Rust's borrow checker</li>
                         </ul>
                     </div>
                     <div class="column">
-                        <h3>IO-bound</h3>
+                        <h3>Liveness</h3>
                         <ul>
-                            <li>File downloads</li>
-                            <li>Database queries</li>
-                            <li>Network operations</li>
+                            <li>Ensures program makes progress</li>
+                            <li>Prevents deadlocks, livelocks, infinite loops</li>
+                            <li>Focus of structured concurrency</li>
                         </ul>
                     </div>
                 </div>
+                <p>Languages typically prioritize one over the other</p>
             </section>
 
+            <!-- Memory Safety in Python and Rust -->
             <section>
-                <h2>Async Programming Models</h2>
-                <ul>
-                    <li>Message passing vs shared state</li>
-                    <li>Structured concurrency</li>
-                    <li>Brief Python async history:
-                        <ul>
-                            <li>Twisted → generators → asyncio → Trio</li>
-                        </ul>
-                    </li>
-                </ul>
+                <h2>How Memory Safety is Achieved</h2>
+                <table>
+                    <tr>
+                        <th>Python</th>
+                        <th>Rust</th>
+                    </tr>
+                    <tr>
+                        <td>Automatic memory management via garbage collection</td>
+                        <td>Compile-time ownership and lifetime checking</td>
+                    </tr>
+                    <tr>
+                        <td>Object reference counting + cycle detection</td>
+                        <td>No garbage collector for most code</td>
+                    </tr>
+                    <tr>
+                        <td>Runtime checks (IndexError, KeyError, etc.)</td>
+                        <td>Static analysis prevents most errors at compile time</td>
+                    </tr>
+                    <tr>
+                        <td>No direct pointer manipulation in pure Python</td>
+                        <td>Safe abstractions around pointers (references, Box, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td>C extensions can introduce memory safety issues</td>
+                        <td>Unsafe blocks explicitly mark potential issues</td>
+                    </tr>
+                </table>
             </section>
 
-            <!-- Rayon section - vertical slide group -->
+            <!-- Structured Concurrency: Liveness Solutions -->
             <section>
-                <!-- Main/top slide with concepts -->
                 <section>
-                    <h2>Rayon: Simple Parallelism in Rust</h2>
+                    <h2>Structured Concurrency: Solving Liveness</h2>
                     <div class="two-columns">
                         <div class="column">
-                            <h3>Iterator Traits</h3>
+                            <h3>Trio's Model</h3>
+                            <img src="images/trio-scope-exit.png" alt="Trio scope exiting diagram" style="height: 40vh;">
+                            <p><small>"All tasks are equal"</small></p>
+                        </div>
+                        <div class="column">
+                            <h3>Key Principles</h3>
                             <ul>
-                                <li><code>iter()</code>: Sequential iteration</li>
-                                <li><code>par_iter()</code>: Parallel iteration</li>
-                                <li>Drop-in replacement API</li>
+                                <li>Tasks tied to lexical scopes</li>
+                                <li>Automatic cancellation on scope exit</li>
+                                <li>Error propagation to parent</li>
+                                <li>Child tasks cannot outlive parent scope</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p><small>↓ Press down for liveness guarantee examples</small></p>
+                </section>
+
+                <section>
+                    <h2>The Infinite Loop Problem</h2>
+                    <div class="two-columns">
+                        <div class="column">
+                            <h3>Problem in Tokio</h3>
+                            <pre><code class="rust">// This will never complete if the socket
+// continues to receive data
+let results = tokio::join!(
+    infinite_socket_reader(&mut socket),
+    some_other_task()
+);
+
+// This line is never reached</code></pre>
+                        </div>
+                        <div class="column">
+                            <h3>Solution in Trio</h3>
+                            <pre><code class="python">async with trio.move_on_after(30):
+    async with trio.open_nursery() as nursery:
+        nursery.start_soon(infinite_socket_reader)
+        nursery.start_soon(some_other_task)
+        
+# Control reaches here after at most 30 seconds</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Cancellation Systems</h2>
+                    <div class="two-columns">
+                        <div class="column">
+                            <h3>Trio's Approach</h3>
+                            <ul>
+                                <li>First-class cancellation scopes</li>
+                                <li>Automatic propagation</li>
+                                <li>Built-in timeout mechanisms</li>
+                                <li>Checkpoint system for cancellation detection</li>
                             </ul>
                         </div>
                         <div class="column">
-                            <h3>Key Features</h3>
+                            <h3>Tokio's Approach</h3>
                             <ul>
-                                <li>Work stealing scheduler</li>
-                                <li>Data race prevention</li>
-                                <li>Automatic chunking</li>
+                                <li>Manual cancellation via channels or drop</li>
+                                <li>Explicit timeout wrappers</li>
+                                <li>select! for racing between operations</li>
+                                <li>No automatic propagation</li>
                             </ul>
                         </div>
                     </div>
-                    <p><small>↓ Press down for implementation example</small></p>
-                </section>
-
-                <!-- Code slide below -->
-                <section>
-                    <h2>Parallel Iterator Example</h2>
-                    <pre><code class="rust">use rayon::prelude::*; 
-
-fn counter() -> u32 { 
-    let mut counter: u32 = 0; 
-    for _ in 0..1_000_000 { counter += 1; } 
-    counter 
-} 
-
-fn main() { 
-    let range: Vec<u32> = (0..8).collect(); 
-    let counter: u32 = range
-        .par_iter()  // Parallel iteration
-        .map(|_| counter())
-        .sum(); 
-    println!("{counter}"); 
-}</code></pre>
-                    <p><small>Simply changing <code>iter()</code> to <code>par_iter()</code> enables parallel execution</small></p>
                 </section>
             </section>
 
-            <!-- Tokio section - vertical slide group -->
+            <!-- Rust's Thread Safety -->
             <section>
-                <!-- Main/top slide with concepts -->
                 <section>
-                    <h2>Tokio: Async Runtime in Rust</h2>
-                    <ul>
-                        <li>Event loop model</li>
-                        <li>Tasks, Spawning, and Futures</li>
-                        <li>Channels for communication</li>
-                        <li>Zero-cost abstractions</li>
-                        <li>Efficient resource utilization</li>
-                    </ul>
-                    <p><small>↓ Press down for MPSC channel example</small></p>
+                    <h2>Rust's Thread Safety Guarantees</h2>
+                    <div class="two-columns">
+                        <div class="column">
+                            <h3>Send Trait</h3>
+                            <ul>
+                                <li>Types that can be transferred between threads</li>
+                                <li>Example: Vec&lt;i32&gt; is Send</li>
+                                <li>Counter-example: Rc&lt;T&gt; is not Send</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h3>Sync Trait</h3>
+                            <ul>
+                                <li>Types that can be shared between threads</li>
+                                <li>Example: Mutex&lt;T&gt; is Sync</li>
+                                <li>Counter-example: RefCell&lt;T&gt; is not Sync</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p><small>↓ Press down for examples</small></p>
                 </section>
 
-                <!-- Code slide below -->
                 <section>
-                    <h2>MPSC Channel Example</h2>
-                    <pre><code class="rust">use tokio::sync::mpsc;
+                    <h2>Static Lifetime Requirements</h2>
+                    <div class="two-columns">
+                        <div class="column">
+                            <h3>Unstructured Tasks</h3>
+                            <pre><code class="rust">// Requires 'static lifetime for data
+tokio::spawn(async move {
+    println!("Data: {:?}", data);
+});
 
-#[tokio::main]
-async fn main() {
-    let (tx, mut rx) = mpsc::channel(100);
+// Common workarounds:
+// 1. Arc::clone()
+// 2. String::to_owned()
+// 3. Sometimes Box::leak() (memory leak)</code></pre>
+                        </div>
+                        <div class="column">
+                            <h3>Structured Alternatives</h3>
+                            <pre><code class="rust">// No 'static requirement
+tokio::task::scope(|s| {
+    let data = vec![1, 2, 3]; // Non-'static!
     
-    tokio::spawn(async move {
-        for i in 0..10 {
-            tx.send(i).await.unwrap();
-        }
+    s.spawn(async move {
+        println!("Data: {:?}", data);
     });
-    
-    while let Some(i) = rx.recv().await {
-        println!("got = {}", i);
-    }
-}</code></pre>
-                    <p><small>Multi-producer, single-consumer channel with backpressure control</small></p>
+});
+
+// Or with join!
+let results = tokio::join!(
+    process_data(&data),
+    other_task()
+);</code></pre>
+                        </div>
+                    </div>
                 </section>
             </section>
 
+            <!-- Comparison of Parallelism Models -->
             <section>
-                <h2>Python's Async Approaches</h2>
+                <h2>Parallelism Approaches</h2>
                 <div class="two-columns">
                     <div class="column">
-                        <h3>concurrent.futures</h3>
+                        <h3>Python</h3>
                         <ul>
-                            <li>ThreadPoolExecutor</li>
-                            <li>ProcessPoolExecutor</li>
+                            <li>concurrent.futures.ProcessPoolExecutor</li>
+                            <li>Multiprocessing module</li>
+                            <li>Future: InterpreterPoolExecutor with free-threaded Python</li>
+                            <li>Limited by GIL in threaded code</li>
                         </ul>
                     </div>
                     <div class="column">
-                        <h3>asyncio</h3>
+                        <h3>Rust</h3>
                         <ul>
-                            <li>Event loop</li>
-                            <li>coroutines</li>
-                            <li>Tasks</li>
+                            <li>std::thread for raw threads</li>
+                            <li>Rayon for data parallelism</li>
+                            <li>Tokio for task concurrency + thread pools</li>
+                            <li>No GIL, true parallelism</li>
                         </ul>
                     </div>
                 </div>
-                <p>InterpreterPoolExecutors (future)</p>
+            </section>
+
+            <!-- Rayon Example -->
+            <section>
+                <h2>Rayon: Data Parallelism in Rust</h2>
+                <pre><code class="rust">use rayon::prelude::*; 
+
+fn main() { 
+    let data: Vec<u32> = (0..1000).collect();
+    
+    // Sequential
+    let sum1: u32 = data.iter().map(|&x| expensive_calculation(x)).sum();
+    
+    // Parallel - just change iter() to par_iter()
+    let sum2: u32 = data.par_iter().map(|&x| expensive_calculation(x)).sum();
+    
+    assert_eq!(sum1, sum2);
+}</code></pre>
+                <p>Drop-in parallelism with minimal code changes</p>
+            </section>
+
+            <!-- Developer Experience -->
+            <section>
+                <h2>Developer Experience Tradeoffs</h2>
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Python Approach</th>
+                        <th>Rust Approach</th>
+                    </tr>
+                    <tr>
+                        <td>Cognitive Load</td>
+                        <td>Lower - hides many concurrency details</td>
+                        <td>Higher - explicit about lifetimes, ownership</td>
+                    </tr>
+                    <tr>
+                        <td>Error Detection</td>
+                        <td>Runtime - errors happen during execution</td>
+                        <td>Compile time - most errors caught before running</td>
+                    </tr>
+                    <tr>
+                        <td>Mental Model</td>
+                        <td>Simple but sometimes hides important details</td>
+                        <td>Complex but precise about behavior</td>
+                    </tr>
+                    <tr>
+                        <td>Composability</td>
+                        <td>High with structured concurrency</td>
+                        <td>Requires more explicit composition</td>
+                    </tr>
+                    <tr>
+                        <td>Performance Control</td>
+                        <td>Limited fine-grained control</td>
+                        <td>Extensive control over execution details</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Key Insights -->
+            <section>
+                <h2>Key Insights</h2>
+                <ol>
+                    <li><strong>Memory Safety vs. Liveness:</strong> Languages typically excel at one</li>
+                    <li><strong>Structured Concurrency:</strong> Provides liveness guarantees Python developers expect</li>
+                    <li><strong>Thread Safety:</strong> Rust's type system makes concurrency bugs compile errors</li>
+                    <li><strong>Developer Experience:</strong> Tradeoffs between simplicity and control</li>
+                    <li><strong>Free-threaded Python on Tokio:</strong> Would need to bridge these different models</li>
+                </ol>
+            </section>
+
+            <!-- Bridging the Gap -->
+            <section>
+                <h2>Challenges for Free-threaded Python atop Tokio</h2>
+                <ul>
+                    <li>Preserving Trio-style structured concurrency guarantees</li>
+                    <li>Adding cancellation propagation to Tokio's model</li>
+                    <li>Maintaining Python's ergonomics with Rust's performance</li>
+                    <li>Ensuring thread-safety without complex annotations</li>
+                    <li>Addressing the infinite loop/liveness problem</li>
+                </ul>
+                <p>The ideal system would combine Python's structured concurrency model with Rust's efficient threading</p>
             </section>
 
             <!-- SECTION 3: CASE STUDY - GENETIC ALGORITHM -->
