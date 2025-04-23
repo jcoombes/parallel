@@ -54,17 +54,17 @@
             <!-- Rust/Python Interop Growth -->
             <section>
                 <section>
-                    <h2>Python/Rust Interop Growth in 2025</h2>
+                    <h3>Python/Rust Interop Growth in 2025</h3>
                     <img src="images/pypi-rust-growth.png" alt="Growth of PyPI packages with Rust components.">
                 </section>
                 <section>
                     <ul>
-                        <h2>Rust/Python Interop Growth in 2025</h2>
+                        <h3>Rust/Python Interop Growth in 2025</h3>
                         <li>Rust language as preferred developer-experience for writing native python extensions.</li>
                         <li>RIIR - Rewrite It In Rust - for 10x-80x* performance improvements</li>
                         <li>PyO3 is the most popular Rust library for Python interop.</li>
                         <li>Maturin is the most popular tool for building and distributing Rust Python packages.</li>
-                        <small>*performance benchmarking is hard, see flame graphs later</small>
+                        <small>*performance benchmarking is hard, see graphs later</small>
                     </ul>
                 </section>
             </section>
@@ -93,7 +93,7 @@
 
             <section>
                 <h2>Free Threading in Python</h2>
-                <p>Python 3.13 shipped an <italic>experimental</italic> variant without the "Global Interpreter Lock"
+                <p>Python 3.13 shipped an <italic>experimental</italic> variant without the Global Interpreter Lock
                 <ul>
                     <li>Expected to become the default in a few years</li>
                     <li>PyO3 supports 3.13t fully</li>
@@ -138,12 +138,12 @@
                 <section>
                     <h2>okay, but I really like python</h2>
                     <p>what are the multi-threaded async alternatives?</p>
-                    <p>well there is threado...</p>
+                    <p>well there is thredo...</p>
                 </section>
                 <section>
-                    <h2>but threado is deado</h2>
+                    <h2>but thredo is deado</h2>
                     <div class="chart-placeholder">
-                        <img src="images/threado-dead.png" alt="threado is super dead">
+                        <img src="images/thredo-dead.png" alt="thredo is super dead">
                     </div>
                     <p>maybe ask <a href="@dabeaz@mastodon.social">@dabeaz</a> to bring it back for 3.14t or 3.15t?</p>
                     <p>or just do dabeaz's <a href="https://www.dabeaz.com/summer.html">summer of rust</a> and create a tokio-based python runtime?</p>
@@ -172,7 +172,7 @@
                             D --> E[anyio]
                     </div>
                     <p>A journey from explicit to implicit concurrency control</p>
-                    <p><small>↓ Press down for examples</small></p>
+                    <p><small>↓ Journey down</small></p>
                 </section>
                 
                 <!-- asyncio -->
@@ -290,6 +290,10 @@ anyio.run(main, backend="trio")</code></pre>
                     </tr>
                 </table>
             </section>
+            <section>
+                <h2>A minute to reflect on memory safety.</h2>
+                <small>and also so I can drink some water...</small>
+            </section>
 
             <!-- Structured Concurrency: Liveness Solutions -->
             <section>
@@ -305,13 +309,11 @@ anyio.run(main, backend="trio")</code></pre>
                             <h3>Key Principles</h3>
                             <ul>
                                 <li>Tasks tied to lexical scopes</li>
-                                <li>Automatic cancellation on scope exit</li>
                                 <li>Error propagation to parent</li>
                                 <li>Child tasks cannot outlive parent scope</li>
                             </ul>
                         </div>
                     </div>
-                    <p><small>↓ Press down for liveness guarantee examples</small></p>
                 </section>
 
                 <section>
