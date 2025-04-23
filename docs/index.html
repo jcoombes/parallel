@@ -51,46 +51,6 @@
                 </ol>
             </section>
 
-            <!-- Test Mermaid Section with vertical slides -->
-            <section>
-                <!-- Top slide with basic diagram -->
-                <section>
-                    <h2>Test Mermaid Diagram</h2>
-                    <div class="mermaid">
-                        flowchart TD
-                            A[Start] --> B{Decision}
-                            B -->|Yes| C[Do Something]
-                            B -->|No| D[Do Nothing]
-                            C --> E[End]
-                            D --> E
-                    </div>
-                    <p><small>↓ Press down for more examples</small></p>
-                </section>
-
-                <!-- Example image slide -->
-                <section>
-                    <h2>Example Image</h2>
-                    <img src="images/flame-graph.png" alt="Example Flame Graph" style="height: 400px;">
-                    <p><small>Example performance flame graph visualization</small></p>
-                </section>
-
-                <!-- Example complex diagram slide -->
-                <section>
-                    <h2>Example Complex Diagram</h2>
-                    <div class="mermaid">
-                        flowchart LR
-                            A[Python Code] -->|PyO3| B{Rust Bridge}
-                            B -->|Async| C[Tokio Runtime]
-                            B -->|Sync| D[Native Thread]
-                            C -->|Events| E[IO Operations]
-                            D -->|Compute| F[CPU Tasks]
-                            E --> B
-                            F --> B
-                    </div>
-                    <p><small>Python-Rust interop architecture diagram</small></p>
-                </section>
-            </section>
-
             <!-- Rust/Python Interop Growth -->
             <section>
                 <section>
@@ -170,6 +130,7 @@
                 <section>
                     <h2>Faster</h2>
                     <p>so you add :rocket: to your project README</p>
+                    <img src="/images/rust-python-perf.png" alt="Rocket emoji">
                 </section>
             </section>
 
@@ -212,54 +173,6 @@
                     </div>
                     <p>A journey from explicit to implicit concurrency control</p>
                     <p><small>↓ Press down for examples</small></p>
-                </section>
-                
-                <!-- Twisted without generators -->
-                <section>
-                    <h3>Twisted (pre-generators)</h3>
-                    <pre><code class="python">from twisted.internet import reactor, defer
-
-def get_data():
-    d = defer.Deferred()
-    # Simulate async operation
-    reactor.callLater(1, lambda: d.callback("Result"))
-    return d
-
-def handle_result(result):
-    print(f"Got: {result}")
-    reactor.stop()
-
-def handle_error(failure):
-    print(f"Error: {failure}")
-    reactor.stop()
-
-d = get_data()
-d.addCallbacks(handle_result, handle_error)
-
-reactor.run()</code></pre>
-                    <p><small>Explicit callback-based approach using Deferreds</small></p>
-                </section>
-                
-                <!-- Twisted with generators -->
-                <section>
-                    <h3>Twisted with generators (inlineCallbacks)</h3>
-                    <pre><code class="python">from twisted.internet import reactor, defer
-from twisted.internet.defer import inlineCallbacks
-
-@inlineCallbacks
-def async_operation():
-    try:
-        result1 = yield get_data()
-        result2 = yield get_more_data(result1)
-        print(f"Final result: {result2}")
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        reactor.stop()
-
-reactor.callWhenRunning(async_operation)
-reactor.run()</code></pre>
-                    <p><small>Semi-implicit coroutines using yield</small></p>
                 </section>
                 
                 <!-- asyncio -->
@@ -426,91 +339,29 @@ let results = tokio::join!(
                         </div>
                     </div>
                 </section>
-
-                <section>
-                    <h2>Cancellation Systems</h2>
-                    <div class="two-columns">
-                        <div class="column">
-                            <h3>Trio's Approach</h3>
-                            <ul>
-                                <li>First-class cancellation scopes</li>
-                                <li>Automatic propagation</li>
-                                <li>Built-in timeout mechanisms</li>
-                                <li>Checkpoint system for cancellation detection</li>
-                            </ul>
-                        </div>
-                        <div class="column">
-                            <h3>Tokio's Approach</h3>
-                            <ul>
-                                <li>Manual cancellation via channels or drop</li>
-                                <li>Explicit timeout wrappers</li>
-                                <li>select! for racing between operations</li>
-                                <li>No automatic propagation</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
             </section>
 
             <!-- Rust's Thread Safety -->
             <section>
-                <section>
-                    <h2>Rust's Thread Safety Guarantees</h2>
-                    <div class="two-columns">
-                        <div class="column">
-                            <h3>Send Trait</h3>
-                            <ul>
-                                <li>Types that can be transferred between threads</li>
-                                <li>Example: Vec&lt;i32&gt; is Send</li>
-                                <li>Counter-example: Rc&lt;T&gt; is not Send</li>
-                            </ul>
-                        </div>
-                        <div class="column">
-                            <h3>Sync Trait</h3>
-                            <ul>
-                                <li>Types that can be shared between threads</li>
-                                <li>Example: Mutex&lt;T&gt; is Sync</li>
-                                <li>Counter-example: RefCell&lt;T&gt; is not Sync</li>
-                            </ul>
-                        </div>
+                <h2>Rust's Thread Safety Guarantees</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h3>Send Trait</h3>
+                        <ul>
+                            <li>Types that can be transferred between threads</li>
+                            <li>Example: Vec&lt;i32&gt; is Send</li>
+                            <li>Counter-example: Rc&lt;T&gt; is not Send</li>
+                        </ul>
                     </div>
-                    <p><small>↓ Press down for examples</small></p>
-                </section>
-
-                <section>
-                    <h2>Static Lifetime Requirements</h2>
-                    <div class="two-columns">
-                        <div class="column">
-                            <h3>Unstructured Tasks</h3>
-                            <pre><code class="rust">// Requires 'static lifetime for data
-tokio::spawn(async move {
-    println!("Data: {:?}", data);
-});
-
-// Common workarounds:
-// 1. Arc::clone()
-// 2. String::to_owned()
-// 3. Sometimes Box::leak() (memory leak)</code></pre>
-                        </div>
-                        <div class="column">
-                            <h3>Structured Alternatives</h3>
-                            <pre><code class="rust">// No 'static requirement
-tokio::task::scope(|s| {
-    let data = vec![1, 2, 3]; // Non-'static!
-    
-    s.spawn(async move {
-        println!("Data: {:?}", data);
-    });
-});
-
-// Or with join!
-let results = tokio::join!(
-    process_data(&data),
-    other_task()
-);</code></pre>
-                        </div>
+                    <div class="column">
+                        <h3>Sync Trait</h3>
+                        <ul>
+                            <li>Types that can be shared between threads</li>
+                            <li>Example: Mutex&lt;T&gt; is Sync</li>
+                            <li>Counter-example: RefCell&lt;T&gt; is not Sync</li>
+                        </ul>
                     </div>
-                </section>
+                </div>
             </section>
 
             <!-- Comparison of Parallelism Models -->
@@ -557,43 +408,6 @@ fn main() {
                 <p>Drop-in parallelism with minimal code changes</p>
             </section>
 
-            <!-- Developer Experience -->
-            <section>
-                <h2>Developer Experience Tradeoffs</h2>
-                <table>
-                    <tr>
-                        <th>Aspect</th>
-                        <th>Python Approach</th>
-                        <th>Rust Approach</th>
-                    </tr>
-                    <tr>
-                        <td>Cognitive Load</td>
-                        <td>Lower - hides many concurrency details</td>
-                        <td>Higher - explicit about lifetimes, ownership</td>
-                    </tr>
-                    <tr>
-                        <td>Error Detection</td>
-                        <td>Runtime - errors happen during execution</td>
-                        <td>Compile time - most errors caught before running</td>
-                    </tr>
-                    <tr>
-                        <td>Mental Model</td>
-                        <td>Simple but sometimes hides important details</td>
-                        <td>Complex but precise about behavior</td>
-                    </tr>
-                    <tr>
-                        <td>Composability</td>
-                        <td>High with structured concurrency</td>
-                        <td>Requires more explicit composition</td>
-                    </tr>
-                    <tr>
-                        <td>Performance Control</td>
-                        <td>Limited fine-grained control</td>
-                        <td>Extensive control over execution details</td>
-                    </tr>
-                </table>
-            </section>
-
             <!-- Key Insights -->
             <section>
                 <h2>Key Insights</h2>
@@ -623,205 +437,174 @@ fn main() {
             <section>
                 <h2>Case Study: Genetic Algorithm</h2>
                 <h3>"A Million Monkeys at a Million Typewriters"</h3>
-                <p>Evolving random text into Hamlet quotes</p>
+                <p>Evolving random text into Shakespeare quotes</p>
                 <blockquote>"Brevity is the soul of wit"</blockquote>
                 <p><em>(Also the soul of optimization)</em></p>
             </section>
 
             <section>
-                <h2>Key Parameters in Genetic Algorithms</h2>
+                <h2>Key Components of Our Genetic Algorithm</h2>
                 <ul>
-                    <li><strong>Population size:</strong> Controls exploration breadth</li>
-                    <li><strong>Mutation rate:</strong> Enables discovering new traits</li>
-                    <li><strong>Selection pressure:</strong> Balances exploitation vs exploration</li>
-                    <li><strong>Crossover rate:</strong> Combines successful traits</li>
+                    <li><strong>Population:</strong> Collection of candidate solutions (text strings)</li>
+                    <li><strong>Fitness Function:</strong> Character-by-character matching with target</li>
+                    <li><strong>Selection:</strong> Tournament selection for choosing parents</li>
+                    <li><strong>Crossover:</strong> Combining parent strings at random split points</li>
+                    <li><strong>Mutation:</strong> Random character changes to maintain diversity</li>
                 </ul>
+                <p>Our goal: Evolve gibberish text into Shakespeare quotes efficiently</p>
             </section>
 
             <section>
-                <h2>Visualizing Crossover in High-Dimensional Space</h2>
-                <ul>
-                    <li>40-character string = 40D vector</li>
-                    <li>Single-point crossover at position 15</li>
-                    <li>Combining orthogonal projections</li>
-                </ul>
-                <div class="chart-placeholder">
-                    [Visualization of string crossover in vector space]
-                </div>
-            </section>
-
-            <!-- Python Implementation section - vertical slide group -->
-            <section>
-                <!-- Main/top slide with concepts -->
-                <section>
-                    <h2>Sequential Implementation</h2>
-                    <h3>Core Components</h3>
-                    <ul>
-                        <li><strong>Population Management:</strong> Random initialization and generational tracking</li>
-                        <li><strong>Fitness Calculation:</strong> Character-by-character matching</li>
-                        <li><strong>Selection:</strong> Fitness-proportional sampling</li>
-                        <li><strong>Reproduction:</strong> Crossover and mutation operations</li>
-                    </ul>
-                    <p><small>↓ Press down for code implementation</small></p>
-                </section>
-
-                <!-- Code slide below -->
-                <section>
-                    <h2>Basic Genetic Algorithm</h2>
-                    <pre><code class="python">def evolve_text(target, pop_size=1000, mutation_rate=0.01):
-    # Create initial population
-    population = [''.join(random.choice(CHARS) 
-                for _ in range(len(target))) 
-                for _ in range(pop_size)]
-    
-    generation = 0
-    best_fit = 0
-    
-    while best_fit < len(target):
-        # Calculate fitness for each member
-        fitness_scores = [calculate_fitness(p, target) 
-                         for p in population]
-        
-        # Selection and reproduction
-        new_population = []
-        for _ in range(pop_size):
-            parent1 = selection(population, fitness_scores)
-            parent2 = selection(population, fitness_scores)
-            child = crossover(parent1, parent2)
-            child = mutate(child, mutation_rate)
-            new_population.append(child)
-            
-        population = new_population
-        # ... rest of implementation</code></pre>
-                    <p><small>Sequential implementation - basis for our parallel optimizations</small></p>
-                </section>
-            </section>
-
-            <section>
-                <h2>Initial Parallelization Strategy</h2>
-                <div class="chart-placeholder">
-                    [Diagram: Parallel fitness calculation pipeline]
-                </div>
-                <p>Pipeline model: fitness → selection → crossover/mutation</p>
-            </section>
-
-            <section>
-                <h2>Identifying Parallelism Opportunities</h2>
-                <ul>
-                    <li><strong>Fitness calculation:</strong> Embarrassingly parallel</li>
-                    <li><strong>Selection:</strong> Limited parallelism (requires sorting)</li>
-                    <li><strong>Reproduction:</strong> Moderately parallel</li>
-                </ul>
-            </section>
-
-            <!-- Tournament Selection - vertical slide group -->
-            <section>
-                <!-- Main/top slide -->
-                <section>
-                    <h2>Tournament Selection</h2>
-                    <ul>
-                        <li>Alternative to global sorting</li>
-                        <li>Independent tournaments = better parallelism</li>
-                        <li>Tunable selection pressure</li>
-                        <li>Natural fit for async/await pattern</li>
-                    </ul>
-                    <p><small>↓ Press down for implementation</small></p>
-                </section>
-
-                <!-- Code slide below -->
-                <section>
-                    <h2>Async Tournament Selection</h2>
-                    <pre><code class="python">async def tournament_selection(population, fitness_func, tournament_size=5):
-    # Select random individuals for tournament
-    tournament = random.sample(population, tournament_size)
-    
-    # Calculate fitness in parallel
-    tasks = [asyncio.create_task(fitness_func(ind)) 
-             for ind in tournament]
-    fitness_values = await asyncio.gather(*tasks)
-    
-    # Return the winner
-    return tournament[fitness_values.index(max(fitness_values))]</code></pre>
-                    <p><small>Concurrent fitness evaluation with minimal synchronization</small></p>
-                </section>
-            </section>
-
-            <section>
-                <h2>Asynchronous Genetic Algorithm Design</h2>
+                <h2>Tokio Architecture for the GA</h2>
                 <div class="mermaid">
-                    flowchart LR
-                        A[Population] --> B{Tournament<br/>Selection}
-                        B -->|Winners| C[Crossover]
-                        C --> D[Mutation]
-                        D --> E[Fitness<br/>Evaluation]
-                        E -->|Next Gen| A
-                        E -->|Best| F[Output]
+                    flowchart TD
+                        A[Main Evolution Loop] --> B[Population]
+                        B --> C[Parallel Fitness Calculation]
+                        C --> D[JoinSet for Tasks]
+                        D --> E[Worker Thread Pool]
+                        B --> F[Tournament Selection]
+                        F --> G[Crossover/Mutation]
+                        G --> B
                 </div>
-                <p>Reduced synchronization points</p>
+                <p>Multi-threaded parallel processing with structured task management</p>
             </section>
 
-            <!-- Optimized Population Data Structure - vertical slide group -->
+            <!-- JoinSet for Parallel Fitness -->
             <section>
-                <!-- Main/top slide -->
-                <section>
-                    <h2>Optimized Population Data Structure</h2>
-                    <ul>
-                        <li>Single central dictionary with generation index</li>
-                        <li>Memory efficiency considerations</li>
-                        <li>Automatic cleanup of older generations</li>
-                    </ul>
-                    <p><small>↓ Press down for implementation details</small></p>
-                </section>
+                <h2>JoinSet: Parallel Fitness Calculation</h2>
+                <pre><code class="rust">pub async fn calculate_fitness_parallel(&mut self) -> Vec<Individual> {
+    let target = Arc::new(self.target.clone());
+    let mut join_set = JoinSet::new();
 
-                <!-- Code slide below -->
-                <section>
-                    <h2>Implementation Details</h2>
-                    <pre><code class="python">class Population:
-    def __init__(self, max_generations_to_keep=3):
-        self.members = {}  # {generation: [members]}
-        self.max_generations = max_generations_to_keep
-        self.current_generation = 0
-        self.lock = asyncio.Lock()
-        
-    async def add_member(self, member):
-        async with self.lock:
-            if member.generation not in self.members:
-                self.members[member.generation] = []
-            self.members[member.generation].append(member)
-            
-    async def cleanup_old_generations(self):
-        async with self.lock:
-            generations = sorted(self.members.keys())
-            to_remove = generations[:-self.max_generations] \
-                if len(generations) > self.max_generations else []
-            for gen in to_remove:
-                del self.members[gen]</code></pre>
-                    <p><small>Thread-safe population management with generational garbage collection</small></p>
-                </section>
+    // Split population into chunks for each worker
+    let chunks: Vec<Vec<Individual>> = self
+        .population
+        .chunks(self.population.len() / num_cpus::get().max(1))
+        .map(|chunk| chunk.to_vec())
+        .collect();
+
+    // Process each chunk in parallel
+    for chunk in chunks {
+        let target_clone = Arc::clone(&target);
+        join_set.spawn(async move {
+            let mut results = Vec::with_capacity(chunk.len());
+            for mut individual in chunk {
+                individual.calculate_fitness(&target_clone);
+                results.push(individual);
+            }
+            results
+        });
+    }
+
+    // Collect results
+    let mut all_results = Vec::with_capacity(self.population.len());
+    while let Some(result) = join_set.join_next().await {
+        if let Ok(chunk_results) = result {
+            all_results.extend(chunk_results);
+        }
+    }
+
+    all_results
+}</code></pre>
+                <p>Adaptive chunking ensures efficient distribution across CPU cores</p>
+            </section>
+
+            <!-- Message Passing -->
+            <section>
+                <h2>Message Passing for Progress Reporting</h2>
+                <pre><code class="rust">// Channel for reporting updates
+let (tx, mut rx) = mpsc::channel(100);
+
+// Spawn a separate task for handling I/O
+if !benchmark_mode {
+    let progress_clone = Arc::clone(&progress);
+    tokio::spawn(async move {
+        while let Some((generation, fitness)) = rx.recv().await {
+            let mut progress = progress_clone.lock().await;
+            progress.push((generation, fitness));
+
+            // Print current status
+            println!("Generation {}: Best fitness {:.4}", 
+                    generation, fitness);
+        }
+    });
+}</code></pre>
+                <p>Decouples computation from I/O to avoid blocking the worker threads</p>
             </section>
 
             <section>
-                <h2>Performance Comparison</h2>
-                <div class="chart-placeholder">
-                    [Flame graph comparing Python vs Rust implementation]
-                </div>
-                <p>Key bottlenecks identified:</p>
+                <h2>Performance Analysis</h2>
+                <img src="docs/images/genetic-algorithm-benchmark.png" alt="Criterion benchmark results">
                 <ul>
-                    <li>Fitness calculation in Python</li>
-                    <li>GIL contention</li>
-                    <li>Memory allocation patterns</li>
+                    <li><strong>Text Size Impact:</strong> Linear scaling with input length</li>
+                    <li><strong>Thread Count:</strong> Near-linear speedup up to CPU core count</li>
+                    <li><strong>Chunk Size:</strong> Optimal at population_size / (2 × num_cpus)</li>
+                    <li><strong>Memory Usage:</strong> ~500 bytes per individual + task overhead</li>
                 </ul>
             </section>
 
-            <!-- SECTION 4: CONCLUSION -->
             <section>
-                <h2>Evolution of Our Implementation</h2>
-                <ol>
-                    <li>Initial implementation</li>
-                    <li>Understanding execution model</li>
-                    <li>Tournament selection for parallelism</li>
-                    <li>Generation-aware asynchronous approach</li>
-                </ol>
+                <h2>Benchmark Results</h2>
+                <ul>
+                    <li><strong>Rust: ~7ms per generation</strong></li>
+                    <li><strong>Python: ~70ms per generation</strong></li>
+                    <li>10x speedup from:
+                        <ul>
+                            <li>Zero-cost abstractions</li>
+                            <li>Efficient parallel execution</li>
+                            <li>No GIL contention</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Key Design Decisions</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h3>Taskification Strategy</h3>
+                        <ul>
+                            <li>Chunk-based vs individual-based tasks</li>
+                            <li>One task per CPU core minimizes overhead</li>
+                            <li>Work-stealing naturally balances uneven chunks</li>
+                            <li>Fixed thread pool matches system CPUs</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Data Sharing Approach</h3>
+                        <ul>
+                            <li>Arc for shared immutable data</li>
+                            <li>Clone for task-local mutable data</li>
+                            <li>Channels for progress communication</li>
+                            <li>Mutex only for visualization data</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Case Study Conclusions</h2>
+                <ul>
+                    <li>Tokio's JoinSet provides efficient task-based parallelism</li>
+                    <li>Message passing effectively decouples computation from I/O</li>
+                    <li>Tournament selection eliminates global synchronization points</li>
+                    <li>Chunking strategy balances parallelism and overhead</li>
+                    <li>Benchmark mode enables accurate performance measurement</li>
+                    <li>Thread safety guaranteed at compile time via Rust's type system</li>
+                </ul>
+                <p>These principles apply broadly to CPU-bound parallel workloads</p>
+            </section>
+
+            <section>
+                <h2>Broader Implications</h2>
+                <ul>
+                    <li>Tokio excels beyond just I/O-bound workloads</li>
+                    <li>Structured concurrency improves reliability for parallel algorithms</li>
+                    <li>Message passing reduces synchronization overhead</li>
+                    <li>Worker thread pools maximize CPU utilization</li>
+                    <li>Compile-time thread safety eliminates entire class of bugs</li>
+                </ul>
+                <p>A free-threaded Python atop Tokio could bring these benefits to Python</p>
             </section>
 
             <section>
@@ -838,46 +621,24 @@ fn main() {
             </section>
 
             <section>
-                <h2>Next Steps and Resources</h2>
-                <div class="two-columns">
-                    <div class="column">
-                        <h3>Communities</h3>
-                        <ul>
-                            <li>Discord: #python-rust-interop</li>
-                            <li>Reddit: r/rustpython</li>
-                            <li>GitHub: PyO3 organization</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h3>Learning Resources</h3>
-                        <ul>
-                            <li>Rust Book</li>
-                            <li>Tokio Documentation</li>
-                            <li>asyncio Documentation</li>
-                        </ul>
-                    </div>
-                </div>
-                <p>Your Contact Information:</p>
-                <p>email@example.com | @twitter_handle | github.com/username</p>
-            </section>
-
-            <section>
                 <h2>Sources and Credits</h2>
                 <ul>
+                    <li>@graingert and the anyio core contributing team</li>
+                    <li>Rust for the Polyglot Programmer</li>
                     <li>Rust programming language book, rustlings, rust by example</li>
                     <li>Tokio glossary</li>
                     <li>Arden labs: Fearless Concurrency in Rust series</li>
                     <li>Piotr's performance benchmarking</li>
                     <li>David Hewitt Rust Nation UK talk</li>
                     <li>Evgenii Seliversov: Parallel Programming in Rust techniques</li>
-                    <li>Personal correspondence</li>
-                    <li>Claude assistance</li>
+                    <li>Rust async book</li>
                 </ul>
             </section>
 
             <section>
                 <h1>Thank You!</h1>
                 <h3>Questions?</h3>
+                <img src="images/iceberg.png" alt="Iceberg">
             </section>
         </div>
     </div>
@@ -906,4 +667,4 @@ fn main() {
     <!-- Custom script - load last -->
     <script src="script.js"></script>
 </body>
-</html> 
+</html>

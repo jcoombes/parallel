@@ -1,5 +1,5 @@
 
 Benchmark results for fibonacci(20) x 1000 iterations:
-Mean time: 1.547125 seconds
-Best time: 1.536062 seconds
-Worst time: 1.563174 seconds
+Mean time: 1.666521 seconds
+Best time: 1.641867 seconds
+Worst time: 1.756285 seconds

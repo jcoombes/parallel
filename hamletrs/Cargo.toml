@@ -5,9 +5,22 @@ edition = "2024"
 
 [dependencies]
 tokio = { version = "1.44", features = ["full"] }
+rand = "0.9.1"
+num_cpus = "1.0"
+indicatif = { version = "0.17", optional = true }
 rayon = "1.10"
-criterion = { version = "0.5.1", features = ["html_reports", "async_futures"] }
+criterion = { version = "0.5.1", features = ["html_reports", "async_tokio"] }
 
 [[bench]]
 name = "tokio_benchmark"
 harness = false
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+
+[profile.bench]
+lto = true
+codegen-units = 1
+opt-level = 3

@@ -17,8 +17,21 @@ echo "Starting profiling..."
 echo -e "${RUST_COLOR}Profiling Rust code...${RESET}"
 cd /code/hamletrs
 . $HOME/.cargo/env
-cargo criterion 2>&1 || echo -e "${RUST_COLOR}Rust benchmarking failed with error: $?${RESET}"
-cp -r target/criterion/* /code/flamegraphs/ 2>&1 || echo -e "${RUST_COLOR}No criterion results to copy. Error: $?${RESET}"
+
+# Run criterion with verbose output and no buffering
+echo -e "${RUST_COLOR}Running criterion benchmarks (this may take a few minutes)...${RESET}"
+stdbuf -oL cargo criterion -- 2>&1 | tee /code/flamegraphs/rust_benchmark.log || {
+    echo -e "${RUST_COLOR}Rust benchmarking failed with error: $?${RESET}"
+    exit 1
+}
+
+# Copy results if they exist
+if [ -d "target/criterion" ]; then
+    echo -e "${RUST_COLOR}Copying criterion results...${RESET}"
+    cp -r target/criterion/* /code/flamegraphs/ 2>&1 || echo -e "${RUST_COLOR}No criterion results to copy. Error: $?${RESET}"
+else
+    echo -e "${RUST_COLOR}No criterion results found${RESET}"
+fi
 
 # Profile Python code
 echo -e "${PYTHON_COLOR}Profiling Python code...${RESET}"

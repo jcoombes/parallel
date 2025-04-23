@@ -1,23 +1,25 @@
-use criterion::{criterion_group, criterion_main, Criterion};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use hamletrs::GeneticAlgorithm;
+use std::time::Duration;
 
-fn fibonacci(n: u64) -> u64 {
-    match n {
-        0 => 1,
-        1 => 1,
-        n => fibonacci(n-1) + fibonacci(n-2),
-    }
-}
-
-fn criterion_benchmark(c: &mut Criterion) {
-    let mut group = c.benchmark_group("fibonacci");
-    group.significance_level(0.1).sample_size(10);
-    group.bench_function("fib 20", |b| b.iter(|| fibonacci(20)));
-    group.finish();
+fn benchmark_ga(c: &mut Criterion) {
+    c.bench_function("genetic_algorithm", |b| {
+        b.to_async(tokio::runtime::Runtime::new().unwrap())
+            .iter(|| async {
+                let target = "to be or not to be";
+                let quotes = vec![];
+                let mut ga = GeneticAlgorithm::new(target, quotes);
+                black_box(ga.evolve(true).await);
+            });
+    });
 }
 
 criterion_group! {
-    name = benches;
-    config = Criterion::default().with_profiler(criterion::profiler::FlamegraphProfiler::new(100));
-    targets = criterion_benchmark
+    name = tokio_benches;
+    config = Criterion::default()
+        .measurement_time(Duration::from_secs(5))
+        .warm_up_time(Duration::from_secs(1));
+    targets = benchmark_ga
 }
-criterion_main!(benches);
+
+criterion_main!(tokio_benches);
