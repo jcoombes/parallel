@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 tokio = { version = "1.44", features = ["full"] }
 rayon = "1.10"
-criterion = { version = "0.5.1", features = ["html_reports"] }
+criterion = { version = "0.5.1", features = ["html_reports", "async_futures"] }
 
 [[bench]]
 name = "tokio_benchmark"

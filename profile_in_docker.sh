@@ -6,6 +6,11 @@ RUST_COLOR='\033[38;5;208m'  # Orange
 PYTHON_COLOR='\033[38;5;40m'  # Green
 RESET='\033[0m'              # Reset color
 
+echo "python --version"
+python3.13t --version
+echo "python3.13t -c \"import sys; print(sys._is_gil_enabled())\""
+python3.13t -c "import sys; print(sys._is_gil_enabled())"
+
 echo "Starting profiling..."
 
 # Profile Rust code
